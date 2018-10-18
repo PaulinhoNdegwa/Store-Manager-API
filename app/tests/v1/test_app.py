@@ -53,7 +53,7 @@ def test_single_product_length(client):
 
 def test_get_unspecified_productid(client):
     """Tests if the api can retrieve a product that is not specified"""
-    response = client.get("/api/v1/products/")
+    response = client.get("/api/v1/products/ ")
     assert response.status_code == 404
 
 def test_get_nonint_productid(client):
@@ -138,7 +138,7 @@ def test_order_excess(client):
 
 def test_get_unspecified_saleid(client):
     """Tests if the api can retrieve a sale order that is not specified"""
-    response = client.get("/api/v1/sales/")
+    response = client.get("/api/v1/sales/ ")
     assert response.status_code == 404
 
 def test_get_nonint_sale_productid(client):
