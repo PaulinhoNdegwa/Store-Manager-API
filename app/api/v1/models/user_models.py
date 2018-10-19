@@ -8,25 +8,26 @@ class User():
     """This class initialized a user object. 
     Also it has a save method that saves the user in a list"""
 
-    def __init__(self, f_name, s_name, email, password, role="attendant"):
-        self.f_name = f_name
-        self.s_name = s_name
-        self.email = email
-        self.password = password
-        self.role = role
+    def __init__(self):
+        pass
 
-    def save_user(self):
+    def save_user(self, email, password, role="attendant"):
         if len(users) == 0:
             user_id = 1
         else:
             user_id = users[-1]["user_id"] + 1
         user = {
             "user_id": user_id,
-            "f_name": self.f_name,
-            "s_name": self.s_name,
-            "email": self.email,
-            "password": self.password,
-            "role":self.role
+            "email": email,
+            "password": password,
+            "role": role
         }
         users.append(user)
         return user    
+
+    def get_user(self, username):
+
+        user_exist = [user for user in users if username == user["username"]]
+        if user_exist:
+            return True
+        return False

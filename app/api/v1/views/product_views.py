@@ -1,16 +1,22 @@
 from flask import abort, jsonify, request
 from flask_restful import  Resource
 from ..models.product_model import Product,products
+from flask_jwt_extended import jwt_required
 
-
-class Products(Resource):
+product = Product()
+class Products(Resource, Product):
     """This class provides access to operations to GET and POST on products"""
 
+    def __init___(self):
+        # self.product = Product()
+        pass
+    @jwt_required
     def get(self):
         """GETs all products"""
-        return jsonify({"Products": products,
-                        "status":200})
 
+        return jsonify({"Products": product.get_all_products(),
+                        "status":200})
+    @jwt_required
     def post(self):
         """Saves a new product item"""
         product_name = request.get_json("product_name")["product_name"].strip(" ")
@@ -24,8 +30,7 @@ class Products(Resource):
         if not request.json:
             abort(400)
 
-        product = Product(product_name, product_price, quantity, min_quantity)
-        newproduct = product.save_product()
+        newproduct = product.save_product(product_name, product_price, quantity, min_quantity)
         return jsonify({"Message":"Successfully saved",
                         "Product id saved": newproduct,
                         "status": 201})
@@ -33,6 +38,7 @@ class Products(Resource):
 
 class SingleProduct(Resource):
     """This resource will be used to retrieves a single product"""
+    @jwt_required
     def get(self, product_id):
         """Gets a single product"""
         if not product_id or not isinstance(product_id, int):
