@@ -12,10 +12,8 @@ class User():
         pass
 
     def save_user(self, email, password, role="attendant"):
-        if len(users) == 0:
-            user_id = 1
-        else:
-            user_id = users[-1]["user_id"] + 1
+        
+        user_id = len(users) + 1
         user = {
             "user_id": user_id,
             "email": email,

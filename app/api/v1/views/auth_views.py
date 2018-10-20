@@ -14,12 +14,12 @@ class Register(Resource, User):
         pass
 
     def post(self):
-        data = request.get_json()
-        email = data["email"]
-        password =data["password"]
-        role = data["role"]       
+        # data = request.get_json()
+        email = request.get_json("email")["email"]
+        password =request.get_json("password")["password"]
+        role = request.get_json("role")["role"]       
 
-        if not data:
+        if not request.get_json:
             return jsonify("Data must be in json format")
         if not email or not password:
             return jsonify({"message":"You must provide username and password",
@@ -46,11 +46,11 @@ class Register(Resource, User):
 class Login(Resource, User):
 
     def post(self):
-        data = request.get_json()
-        email = data["email"]
-        password =data["password"]
+        # data = request.get_json()
+        email = request.get_json("email")["email"]
+        password =request.get_json("password")["password"]
 
-        if not data:
+        if not request.get_json:
             return jsonify("Data must be in json format")
         if not email or not password:
             return jsonify("You must provide username and password")
@@ -73,6 +73,7 @@ class Login(Resource, User):
         access_token = create_access_token(identity=email)
         return jsonify({
             "message":"Successfully logged in",
-            "token": access_token
+            "token": access_token,
+            "status": 201
         })
         

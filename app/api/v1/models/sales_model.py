@@ -15,10 +15,8 @@ class Sale():
         self.attendant =  attendant
 
     def save_sale(self):
-        if len(sales) == 0:
-            sale_id = 1
-        else:
-            sale_id = sales[-1]["sale_id"] + 1
+        
+        sale_id = len(sales) + 1
         sale = {
             "sale_id": sale_id,
             "product_name": self.product_name,

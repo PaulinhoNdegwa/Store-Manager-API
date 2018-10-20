@@ -11,10 +11,8 @@ class Product():
 
     def save_product(self, product_name, product_price, quantity, min_quantity):
         """Method to create and save a product dict object"""
-        if len(products) == 0:
-            product_id= 1
-        else:
-            product_id = products[-1]["product_id"] + 1
+       
+        product_id = len(products) + 1
         product = {
             "product_id": product_id,
             "product_name": product_name,

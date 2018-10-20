@@ -14,7 +14,6 @@ class Sales(Resource):
     @jwt_required
     def post(self):
         """Saves a new sales order"""
-        # sale_id = uuid.uuid1()
         product_name = request.get_json("product_name")["product_name"].strip(" ")
         product_price = int(request.get_json("product_price")["product_price"])
         quantity = int(request.get_json("quantity")["quantity"])
@@ -32,7 +31,6 @@ class Sales(Resource):
         excess_order = [product for product in product_available if quantity > (product["quantity"] - product["min_quantity"])]
 
         if len(product_available) == 0:
-            # abort(400)
             return jsonify({"message":"Product not available",
                             "status":404})
         elif len(excess_order) > 0:

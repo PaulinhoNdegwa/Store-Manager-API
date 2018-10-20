@@ -43,9 +43,9 @@ class SingleProduct(Resource):
         """Gets a single product"""
         if not product_id or not isinstance(product_id, int):
             abort(404)		
-        product = [product for product in products if product["product_id"] == product_id]
-        if len(product) == 0:
-            return jsonify({"Message": "No product found",
+        oneproduct = product.get_single_product(product_id)
+        if len(oneproduct) == 0:
+            return jsonify({"Product": "No product found",
 			    "status":404})
-        return jsonify({"Product" : product,
+        return jsonify({"Product" : oneproduct,
             "status" : 200})
