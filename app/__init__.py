@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 from Instance.config import app_config
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager 
 
 def create_app(config_name):
 
