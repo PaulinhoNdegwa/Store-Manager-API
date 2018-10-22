@@ -52,6 +52,16 @@ def test_signup_with_invalid_email(client):
     response = client.post("/api/v1/auth/signup", data=json.dumps(data))
     assert json.loads(response.data)["status"] == 400
 
+def test_signup_with_invalid_passowrd(client):
+    """Function to test  signup with invalid password"""
+    data = {
+            "email": "paul@gmail.com",
+            "password": "123456"
+            }
+    
+    response = client.post("/api/v1/auth/login", data=json.dumps(data))
+    assert json.loads(response.data)["status"] == 400
+
 def test_successful_login(client):
     """Function to test successful signup"""
     
@@ -127,7 +137,7 @@ def test_empty_product_name(client):
         "min_quantity": 10
     }
     response = client.post("/api/v1/products", data=json.dumps(product), headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 400
+    assert json.loads(response.data)["status"] == 400
 
 
 def test_get_unsaved_product(client):
@@ -223,7 +233,7 @@ def test_empty_sale_product_name(client):
         "attendant": "John Doe"
     }
     response = client.post("/api/v1/sales", data=json.dumps(sale) , headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 400
+    assert json.loads(response.data)["status"] == 400
 
 
 def test_get_unsaved_sale_order(client):

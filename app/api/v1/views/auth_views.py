@@ -67,7 +67,8 @@ class Login(Resource, User):
             })
         if password != user_exists[0]["password"]:
             return jsonify({
-                "message":"Incorrect password"
+                "message":"Incorrect password",
+                "status": 400
             })
         
         access_token = create_access_token(identity=email)

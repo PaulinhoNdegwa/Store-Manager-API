@@ -21,3 +21,8 @@ def create_app(config_name):
     storemanager.register_blueprint(auth_bp)
 
     return storemanager
+
+    @jwt.user_claims_loader
+    def add_role_claim(role):
+        return role
+

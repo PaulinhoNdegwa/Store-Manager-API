@@ -1,8 +1,5 @@
 
-products = []
-sales = []
 users = []
-
 
 class User():
     """This class initialized a user object. 
@@ -24,8 +21,13 @@ class User():
         return user    
 
     def get_user(self, username):
+        """Method returns one user"""
 
         user_exist = [user for user in users if username == user["username"]]
-        if user_exist:
-            return True
-        return False
+        return user_exist
+        
+
+    def get_all_users(self):
+        """This method returns all users """
+
+        return users
