@@ -5,8 +5,8 @@ from .views.sales_views import Sales, SingleSale
 from .views.users_views import Users, SingleUser
 from .views.auth_views import Register, Login
 
-app_blueprint = Blueprint("api", __name__, url_prefix='/api/v1')
-api = Api(app_blueprint)
+version_1 = Blueprint("api_v1", __name__, url_prefix='/api/v1')
+api = Api(version_1)
 
 auth_blueprint = Blueprint("api_auth", __name__, url_prefix="/api/v1/auth")
 auth_api = Api(auth_blueprint)

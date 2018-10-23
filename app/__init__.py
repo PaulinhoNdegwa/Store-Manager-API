@@ -14,11 +14,14 @@ def create_app(config_name):
     storemanager.config.from_object(app_config[config_name])
     # storemanager.config["TESTING"] = True
 
-    from .api.v1 import app_blueprint as v1
+    from .api.v1 import version_1 as v1
     storemanager.register_blueprint(v1)
 
     from .api.v1 import auth_blueprint as auth_bp
     storemanager.register_blueprint(auth_bp)
+
+    from .api.v2 import version_2 as v2
+    storemanager.register_blueprint(v2)    
 
     return storemanager
 
