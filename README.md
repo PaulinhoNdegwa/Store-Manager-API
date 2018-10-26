@@ -3,7 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/613b98b77564d6e19702/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
 
 
-# Store-Manager-API
+# Store-Manager-API 
 
 This project involves building API endpoints for a Store Manager app. The following endpoints are the minimun required
 
