@@ -23,7 +23,7 @@ class User():
     def get_user(self, username):
         """Method returns one user"""
 
-        user_exist = [user for user in users if username == user["username"]]
+        user_exist = [user for user in users if username == user["email"]]
         return user_exist
         
 

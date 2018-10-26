@@ -4,7 +4,8 @@ import os
 class Config(object):
     """This is the parent config class"""
     DEBUG = True
-    SECRET_KEY = "SECRETKEY001"
+    SECRET_KEY = os.getenv("SECRET")
+    DATABASE_URL = os.getenv("DATABASE_URL_APP")
 
 
 class DevelopmentConfiguration(Config):
@@ -16,6 +17,8 @@ class TestingConfiguration(Config):
     """Configurations for testing with separate database"""
     TESTING = True
     DEBUG = True
+    DATABASE_URL = os.getenv("DATABASE_URL_TEST")
+    # DATABASE_URL="user='postgres',password='1234', host='localhost', port='5432', dbname='test_db'"
 
 
 class StagingConfiguration(Config):

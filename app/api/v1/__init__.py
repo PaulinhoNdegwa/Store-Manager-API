@@ -8,8 +8,8 @@ from .views.auth_views import Register, Login
 version_1 = Blueprint("api_v1", __name__, url_prefix='/api/v1')
 api = Api(version_1)
 
-auth_blueprint = Blueprint("api_auth", __name__, url_prefix="/api/v1/auth")
-auth_api = Api(auth_blueprint)
+auth_blueprint = Blueprint("api_auth_v1", __name__, url_prefix="/api/v1/auth")
+auth_api_v1 = Api(auth_blueprint)
 
 api.add_resource(Products, "/products")
 api.add_resource(Sales, "/sales")
@@ -19,5 +19,5 @@ api.add_resource(SingleSale, "/sales/<int:sale_id>")
 api.add_resource(SingleUser, "/users/<int:user_id>")
 
 
-auth_api.add_resource(Register, "/signup")
-auth_api.add_resource(Login, "/login")
+auth_api_v1.add_resource(Register, "/signup")
+auth_api_v1.add_resource(Login, "/login")
