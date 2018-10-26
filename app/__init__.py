@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 
-from instance.config import app_config
+from Instance.config import app_config
 from settings import load_env_var
 from db import tables
 from flask_jwt_extended import JWTManager 
