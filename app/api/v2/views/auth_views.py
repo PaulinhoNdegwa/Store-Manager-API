@@ -1,7 +1,7 @@
 from flask import jsonify, request, json
 from flask_restful import Resource
 from ..models.user_models import User
-from flask_jwt_extended import jwt_required, get_jwt_claims, JWTManager, get_raw_jwt
+from flask_jwt_extended import jwt_required, get_jwt_claims, JWTManager,get_jwt_identity, get_raw_jwt
 
 
 
@@ -18,12 +18,15 @@ class Register(Resource, User):
         confirm_password =request.get_json("confirm_password")["confirm_password"]
         role = request.get_json("role")["role"]
 
+        user = get_jwt_identity()["username"].lower()
+        print(user)
+
         role_claim=get_jwt_claims()["role"].lower()
         if role_claim !="admin":
             print("not admin")
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
         # print("admin")
         

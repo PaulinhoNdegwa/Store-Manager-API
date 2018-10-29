@@ -18,7 +18,7 @@ class Sales(Resource, Sale):
         if role_claim !="admin":
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
 
         return self.sale.get_all_sales()
@@ -49,7 +49,7 @@ class SingleSale(Resource, Sale):
         if role_claim !="admin":
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
         if not isinstance(sale_id, int) or not sale_id:
             return jsonify({"message":"Please provide a valid sale id(int)",

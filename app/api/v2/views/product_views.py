@@ -1,7 +1,7 @@
 from flask import abort, jsonify, request
 from flask_restful import  Resource
 from ..models.product_model import Product
-from flask_jwt_extended import jwt_required, get_jwt_claims
+from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
 
 # product = Product()
 class Products(Resource, Product):
@@ -26,17 +26,27 @@ class Products(Resource, Product):
         quantity = request.get_json("quantity")["quantity"]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
+        current_user = get_jwt_identity()["username"].lower()
+
         role_claim=get_jwt_claims()["role"].lower()
         print(role_claim)
         if role_claim !="admin":
             # print("not admin")
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
         
+        product= {
+            "product_name": product_name,
+            "model": model,
+            "product_price":product_price,
+            "quantity":quantity,
+            "min_quantity": min_quantity,
+            "created_by": current_user
+        }
         
-        return self.save_product(product_name, model, product_price, quantity, min_quantity)
+        return self.save_product(**product)
         
 
 
@@ -62,17 +72,30 @@ class SingleProduct(Resource, Product):
         quantity = request.get_json("quantity")["quantity"]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
+        current_user = get_jwt_identity()["username"].lower()
+        print(current_user)
+
         role_claim=get_jwt_claims()["role"].lower()
         print(role_claim)
         if role_claim !="admin":
             # print("not admin")
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
+
+        product= {
+            "product_id": product_id,
+            "product_name": product_name,
+            "model": model,
+            "product_price":product_price,
+            "quantity":quantity,
+            "min_quantity": min_quantity,
+            "created_by": current_user
+        }
         
         
-        return self.update_product(product_id,product_name, model, product_price, quantity, min_quantity)
+        return self.update_product(**product)
 
     @jwt_required
     def delete(self, product_id):
@@ -83,7 +106,7 @@ class SingleProduct(Resource, Product):
             # print("not admin")
             return jsonify({
                 "message":"Unauthorized! You are not an admin",
-                "status":403
+                "status":401
             })
 
         return self.delete_product(product_id)

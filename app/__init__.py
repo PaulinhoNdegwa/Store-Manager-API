@@ -32,8 +32,12 @@ def create_app(config_name):
 
 		
 	@jwt.user_claims_loader
-	def add_claim_to_access_token(role):
-		return {"role":role}
+	def add_claim_to_access_token(user_identity):
+		return {"role":user_identity["role"]}
+
+	@jwt.user_identity_loader
+	def user_identity_lookup(user_identity):
+		return {"username":user_identity["username"]}
 
 	return storemanager
 

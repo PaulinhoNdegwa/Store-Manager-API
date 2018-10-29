@@ -4,5 +4,4 @@ __pycache__
 .vscode
 *.pyc
 .idea
-.env
 .coverage

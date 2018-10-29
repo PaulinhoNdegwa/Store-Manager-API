@@ -23,7 +23,7 @@ class Product():
         return product_exist
 
 
-    def save_product(self, product_name, model, product_price, quantity, min_quantity=5):
+    def save_product(self, product_name, model, product_price, quantity, min_quantity, created_by):
         """Method to create and save a product dict object"""
 
         if not product_name or product_name=="" or not product_price :
@@ -43,7 +43,9 @@ class Product():
             return jsonify({"message":"Product already exists",
                             "status":409})
 
-        cur.execute("INSERT INTO products(product_name, product_model, unit_price, quantity, min_quantity) VALUES(%s, %s, %s, %s, %s) RETURNING product_id, product_name, product_model, unit_price, quantity, min_quantity",(product_name, model, product_price, quantity, min_quantity,))
+        cur.execute("""INSERT INTO products(product_name, product_model, unit_price, quantity, min_quantity, created_by)
+                 VALUES(%s, %s, %s, %s, %s, %s) RETURNING product_id, product_name, product_model, unit_price, quantity, min_quantity, created_by"""
+                ,(product_name, model, product_price, quantity, min_quantity, created_by,))
         new_product = cur.fetchone()
         product = {
             "Product Id":new_product[0],
@@ -51,14 +53,15 @@ class Product():
             "Product Model":new_product[2],
             "Unit Price":new_product[3],
             "Quantity":new_product[4],
-            "Min Quantity":new_product[5]
+            "Min Quantity":new_product[5],
+            "Created By": new_product[6]
         }
         close_connection(conn)
         return jsonify({"Message":"Successfully saved",
                         "Product id saved": product,
                         "status": 201})
 
-    def update_product(self, product_id, product_name, model, product_price, quantity, min_quantity=5):
+    def update_product(self, product_id, product_name, model, product_price, quantity, min_quantity, created_by):
         if not product_name or product_name=="" or not product_price :
             return jsonify({"message":"You must provide product details",
                             "status":400})
@@ -74,8 +77,10 @@ class Product():
                             "status":404})
         conn = open_connection()
         cur = conn.cursor()
-        cur.execute("UPDATE products set product_name=%s, product_model=%s, unit_price=%s, quantity=%s, min_quantity=%s WHERE product_id=%s RETURNING product_id, product_name, product_model, unit_price, quantity, min_quantity",
-                    (product_name, model, product_price, quantity, min_quantity, product_id,))
+        cur.execute("""UPDATE products set product_name=%s, product_model=%s, unit_price=%s, quantity=%s, 
+                    min_quantity=%s, created_by=%s WHERE product_id=%s RETURNING product_id, product_name,
+                     product_model, unit_price, quantity, min_quantity, created_by""",
+                    (product_name, model, product_price, quantity, min_quantity, created_by, product_id, ))
         updated_product = cur.fetchone()
         product = {
             "Product Id":updated_product[0],
@@ -83,7 +88,8 @@ class Product():
             "Product Model":updated_product[2],
             "Unit Price":updated_product[3],
             "Quantity":updated_product[4],
-            "Min Quantity":updated_product[5]
+            "Min Quantity":updated_product[5],
+            "Updated by": updated_product[6]
         }
         close_connection(conn)
         return jsonify({"message":"Product successfully updated",

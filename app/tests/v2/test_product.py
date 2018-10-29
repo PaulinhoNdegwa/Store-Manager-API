@@ -30,7 +30,7 @@ class ProductTestCase(BaseTest):
     @pytest.mark.timeout(30)
     def test_empty_product(self):
         """Test saving empty product details"""
-        access_token = self.authenticate()
+        access_token = self.authenticateAdmin()
         empty_product_details = {
             "product_name":" ",
             "model":" ",
