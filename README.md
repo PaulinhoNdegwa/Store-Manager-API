@@ -2,8 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/PaulinhoNdegwa/Store-Manager-API/badge.svg?branch=develop)](https://coveralls.io/github/PaulinhoNdegwa/Store-Manager-API?branch=develop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8cfedb70e884468b7496/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
 
+# Store-Manager-API
 
-# Store-Manager-API 
 
 This project involves building API endpoints for a Store Manager app. The following endpoints are the minimun required
 
