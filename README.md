@@ -1,11 +1,9 @@
-[![Build Status](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API.svg?branch=ft-users-views-and-models-161336198)](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API)
-
-[![Coverage Status](https://coveralls.io/repos/github/PaulinhoNdegwa/Store-Manager-API/badge.svg?branch=ft-users-views-and-models-161336198)](https://coveralls.io/github/PaulinhoNdegwa/Store-Manager-API?branch=ft-users-views-and-models-161336198)
-
-[![Maintainability](https://api.codeclimate.com/v1/badges/613b98b77564d6e19702/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
+[![Build Status](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API.svg?branch=develop)](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API)
+[![Coverage Status](https://coveralls.io/repos/github/PaulinhoNdegwa/Store-Manager-API/badge.svg?branch=develop)](https://coveralls.io/github/PaulinhoNdegwa/Store-Manager-API?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8cfedb70e884468b7496/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
 
 
-# Store-Manager-API
+# Store-Manager-API 
 
 This project involves building API endpoints for a Store Manager app. The following endpoints are the minimun required
 
