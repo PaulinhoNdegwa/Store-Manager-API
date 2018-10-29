@@ -70,8 +70,14 @@ class Login(Resource, User):
                 "message":"Incorrect password",
                 "status": 400
             })
+        print(user_exists)
+        role = user_exists[0]["role"]
+        user_identity = {
+            "username":email,
+            "role": role
+        }
         
-        access_token = create_access_token(identity=email)
+        access_token = create_access_token(identity=user_identity)
         return jsonify({
             "message":"Successfully logged in",
             "token": access_token,

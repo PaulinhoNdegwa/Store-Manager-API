@@ -52,7 +52,7 @@ def test_signup_with_invalid_email(client):
     response = client.post("/api/v1/auth/signup", data=json.dumps(data))
     assert json.loads(response.data)["status"] == 400
 
-def test_signup_with_invalid_passowrd(client):
+def test_login_with_invalid_passowrd(client):
     """Function to test  signup with invalid password"""
     data = {
             "email": "paul@gmail.com",

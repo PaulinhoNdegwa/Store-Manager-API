@@ -4,7 +4,6 @@ from ..models.user_models import User
 from flask_jwt_extended import jwt_required, get_jwt_claims, JWTManager,get_jwt_identity, get_raw_jwt
 
 
-
 class Register(Resource, User):
 
     def __init__(self):
