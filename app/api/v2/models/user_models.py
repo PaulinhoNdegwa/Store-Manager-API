@@ -172,7 +172,11 @@ class User():
                 }
                 users_list.append(user_dict)
             print(users_list)
-            return users_list
+            return ({
+                "Message":"Successful",
+                "Users": users_list,
+                "status":200
+            })
         except (Exception, psycopg2.DatabaseError) as error:
             return jsonify({
             "message":"Could not get all users",

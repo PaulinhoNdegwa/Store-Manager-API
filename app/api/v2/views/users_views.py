@@ -22,7 +22,7 @@ class Users(Resource, User):
                 "message":"Unauthorized! You are not an admin",
                 "status":401
             })
-        return jsonify(self.get_all_users())   
+        return self.get_all_users()
 
 
 class SingleUser(Resource, User):
@@ -45,7 +45,7 @@ class SingleUser(Resource, User):
 
         if not user_id or not isinstance(user_id, int):
             return jsonify({"message":"Please provide a valid user id(int)",
-                            "status":404})
+                            "status":400})
         user_exists =  self.user.get_user_by_id(user_id)
 
         if not user_exists:

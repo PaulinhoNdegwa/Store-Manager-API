@@ -1,5 +1,6 @@
 from app.tests.v2.basetest import BaseTest
 from flask import json
+from .data import sale, sale_update, product, empty_sale_details
 
 
 class SalesTestCase(BaseTest):
@@ -8,9 +9,9 @@ class SalesTestCase(BaseTest):
     def test_post_sale(self):
         access_token_2 = self.authenticateAdmin()
         access_token = self.authenticate()
-        self.client.post("/api/v2/products", data=json.dumps(self.product), 
+        self.client.post("/api/v2/products", data=json.dumps(product), 
                 headers=dict(Authorization= "Bearer "+access_token_2))
-        response = self.client.post("/api/v2/sales", data=json.dumps(self.sale), 
+        response = self.client.post("/api/v2/sales", data=json.dumps(sale), 
                 headers=dict(Authorization= "Bearer "+access_token))
         self.assertEqual(json.loads(response.data)["status"], 201)
 
@@ -18,9 +19,9 @@ class SalesTestCase(BaseTest):
         """"Test GET all sales orders"""
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
-        self.client.post("/api/v2/products", data=json.dumps(self.product), 
+        self.client.post("/api/v2/products", data=json.dumps(product), 
                 headers=dict(Authorization= "Bearer "+access_token_2))
-        self.client.post("/api/v2/sales", data=json.dumps(self.sale), 
+        self.client.post("/api/v2/sales", data=json.dumps(sale), 
                 headers=dict(Authorization= "Bearer "+access_token))
         response = self.client.get( "/api/v2/sales",
                 headers=dict(Authorization= "Bearer "+access_token_2))
@@ -28,11 +29,7 @@ class SalesTestCase(BaseTest):
 
     def test_empty_sale(self):
         access_token = self.authenticate()
-        empty_sale_details = {
-            "product_name":" ",
-            "product_model":" ",
-            "quantity": 5
-        }
+        
         response = self.client.post("/api/v2/sales", data=json.dumps(empty_sale_details), 
                 headers=dict(Authorization= "Bearer "+access_token))
         self.assertEqual(json.loads(response.data)["status"], 400)
@@ -41,9 +38,9 @@ class SalesTestCase(BaseTest):
         """"Test GET single sale order"""
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
-        self.client.post("/api/v2/products", data=json.dumps(self.product), 
+        self.client.post("/api/v2/products", data=json.dumps(product), 
                 headers=dict(Authorization= "Bearer "+access_token_2))
-        response = self.client.post("/api/v2/sales", data=json.dumps(self.sale), 
+        response = self.client.post("/api/v2/sales", data=json.dumps(sale), 
                 headers=dict(Authorization= "Bearer "+access_token))
         response = self.client.get( "/api/v2/sales/1",
                 headers=dict(Authorization= "Bearer "+access_token_2))

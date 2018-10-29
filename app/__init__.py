@@ -28,7 +28,6 @@ def create_app(config_name):
 
 	from .api.v2 import auth_blueprint_v2 as auth_bp_v2
 	storemanager.register_blueprint(auth_bp_v2) 
-	# tables.create_tables()
 
 		
 	@jwt.user_claims_loader
