@@ -2,6 +2,7 @@ from flask import abort, jsonify, request
 from flask_restful import  Resource
 from ..models.sales_model import Sale
 from flask_jwt_extended import jwt_required, get_jwt_claims
+from ..utils.decorators import *
     
 class Sales(Resource, Sale):
     """This class provides access to operations to GET and POST on sales"""
@@ -11,19 +12,15 @@ class Sales(Resource, Sale):
         pass
 
     @jwt_required
+    @admin_only
     def get(self):
         """Gets all sales orders"""
-        role_claim=get_jwt_claims()["role"].lower()
-        # print(role_claim)
-        if role_claim !="admin":
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
-
+        
         return self.sale.get_all_sales()
 
+
     @jwt_required
+    @atttendant_only
     def post(self):
         """Saves a new sales order"""
         
@@ -42,15 +39,10 @@ class SingleSale(Resource, Sale):
 
 
     @jwt_required
+    @token_required
     def get(self, sale_id):
         """Gets a single sale order"""
-        role_claim=get_jwt_claims()["role"].lower()
-        print(role_claim)
-        if role_claim !="admin":
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
+        
         if not isinstance(sale_id, int) or not sale_id:
             return jsonify({"message":"Please provide a valid sale id(int)",
                             "status":404})

@@ -184,7 +184,7 @@ class User():
         })
 
     def lookup_token(self, token):
-        """This method adds a token to blacklist table"""
+        """This method looks up a token in blacklist table"""
         try:
             conn = open_connection()
             cur = conn.cursor()

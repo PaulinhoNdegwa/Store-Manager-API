@@ -118,13 +118,13 @@ def test_get_unspecified_productid(client):
     """Tests if the api can retrieve a product that is not specified"""
     access_token = authenticate(client)
     response = client.get("/api/v1/products/ " , headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 404
+    assert json.loads(response.data)["status"] == 404
 
 def test_get_nonint_productid(client):
     """Tests if the api can retrieve a product that is not specified"""
     access_token = authenticate(client)
     response = client.get("/api/v1/products/j" , headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 404
+    assert json.loads(response.data)["status"] == 404
 
 
 def test_empty_product_name(client):
@@ -214,13 +214,13 @@ def test_get_unspecified_saleid(client):
     """Tests if the api can retrieve a sale order that is not specified"""
     access_token = authenticate(client)
     response = client.get("/api/v1/sales/ ", headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 404
+    assert json.loads(response.data)["status"] == 404
 
 def test_get_nonint_sale_productid(client):
     """Tests if the api can retrieve a sale order that is not specified"""
     access_token = authenticate(client)
     response = client.get("/api/v1/sales/j", headers=dict(Authorization="Bearer "+access_token))
-    assert response.status_code == 404
+    assert json.loads(response.data)["status"] == 404
 
 
 def test_empty_sale_product_name(client):

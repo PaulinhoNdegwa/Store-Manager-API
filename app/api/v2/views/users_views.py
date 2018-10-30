@@ -2,6 +2,7 @@ from flask import abort, jsonify, request, Blueprint
 from flask_restful import  Resource
 from ..models.user_models import User
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
+from ..utils.decorators import admin_only, atttendant_only, token_required
 
 
 class Users(Resource, User):
@@ -12,16 +13,11 @@ class Users(Resource, User):
 
 
     @jwt_required
+    @admin_only
     def get(self):
         """Gets all users"""
         
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
+        
         return self.get_all_users()
 
 
@@ -31,42 +27,46 @@ class SingleUser(Resource, User):
         self.user = User()
         
     @jwt_required
+    @token_required
     def get(self, user_id):
         """Gets a single user"""
-        user = get_jwt_identity()["username"].lower()
-        print(user)
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
+        
+        try:
+            user = get_jwt_identity()["username"].lower()
+            print(user)
+            print(user_id)
+            print(isinstance(int(user_id), int))
+            "if not isinstance(user_id, int):"
+                
+            user_exists =  self.user.get_user_by_id(user_id)
+
+            if not user_exists:
+                return jsonify({"message":"User not found",
+                                "status": 404})
+            user = {
+                "User Id": user_exists[0],
+                "Email": user_exists[1],
+                "Role": user_exists[3]
+            }
             return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
+                        "Message":"Successful",
+                        "User" : user,
+                        "status" : 200
+                        })
 
-        if not user_id or not isinstance(user_id, int):
+        except:
+            """Create an exception if try fails"""
             return jsonify({"message":"Please provide a valid user id(int)",
-                            "status":400})
-        user_exists =  self.user.get_user_by_id(user_id)
-
-        if not user_exists:
-            return jsonify({"message":"User not found",
-                            "status": 404})
-        return jsonify({"User" : user_exists,
-                        "status" : 200})
+                                "status":400})
 
     @jwt_required
+    @admin_only
     def put(self, user_id):
         """Allows admin to set Attendant as admin"""
 
         role = request.get_json("role")["role"].strip(" ")
 
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
+       
         if not user_id or not isinstance(user_id, int):
             return jsonify({"message":"Please provide a valid user id(int)",
                             "status":404})

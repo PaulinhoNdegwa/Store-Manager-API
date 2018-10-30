@@ -34,12 +34,12 @@ class UsersTestCase(BaseTest):
         response = self.client.get("/api/v2/users", headers=dict(Authorization = "Bearer "+access_token))
         self.assertEqual(json.loads(response.data)["status"], 401)
     
-    # def test_get_nonint_user_id(self):
-    #     """Test get user using a nonint user_id"""
+    def test_get_nonint_user_id(self):
+        """Test get user using a nonint user_id"""
 
-    #     access_token = self.authenticateAdmin()
-    #     response = self.client.get("/api/v2/users/ ", headers=dict(Authorization = "Bearer "+access_token))
-    #     self.assertEqual(json.loads(response.data)["status"], 400)
+        access_token = self.authenticateAdmin()
+        response = self.client.get("/api/v2/users/qw", headers=dict(Authorization = "Bearer "+access_token))
+        self.assertEqual(json.loads(response.data)["status"], 404)
 
     def test_update_user_role(self):
         """This method tests the update of user role"""
@@ -49,6 +49,7 @@ class UsersTestCase(BaseTest):
         response = self.client.put("/api/v2/users/2", data=json.dumps(new_role),
                     headers=dict(Authorization = "Bearer "+access_token))
         self.assertEqual(json.loads(response.data)["status"], 200)
+        
         
     def test_update_role_as_attendant(self):
         """This method tests the update of user role"""

@@ -5,6 +5,7 @@ from db.db_config import open_connection, close_connection
 from psycopg2 import Error
 import psycopg2
 from ..models.category_model import Category
+from ..utils.decorators import admin_only, token_required
 
 class Categories(Resource, Category):
     """Creates the endpoint for categories"""
@@ -12,20 +13,13 @@ class Categories(Resource, Category):
     def __init__(self):
         """Initializes a category object"""
         self.category = Category()
-
     @jwt_required
+    @admin_only
     def post(self):
         """Endpoint to add a new category"""
         cat_name = request.get_json("cat_name")["cat_name"].strip(" ")
         description = request.get_json("desc")["desc"].strip(" ")
 
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
 
         if not request.get_json:
             return jsonify({
@@ -42,33 +36,19 @@ class SingleCategory(Resource, Category):
     def __init__(self):
         """Initializes a category object"""
         self.category = Category()
-
     @jwt_required
+    @admin_only
     def put(self, cat_id):
         """Endpoint to delete a category"""
         cat_name = request.get_json("cat_name")["cat_name"].strip()
         cat_desc = request.get_json("desc")["desc"]
 
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
         
         return self.category.update_category(cat_id, cat_name, cat_desc)
             
-
     @jwt_required
+    @admin_only
     def delete(self, cat_id):
         """Endpoint to delete a category"""
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
-            print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
         
         return self.category.delete_category(cat_id)
