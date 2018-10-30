@@ -2,6 +2,7 @@ from flask import abort, jsonify, request
 from flask_restful import  Resource
 from ..models.product_model import Product
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
+from ..utils.decorators import *
 
 # product = Product()
 class Products(Resource, Product):
@@ -12,12 +13,14 @@ class Products(Resource, Product):
 
 
     @jwt_required
+    @atttendant_only
     def get(self):
         """GETs all products"""
         return jsonify({"Products": self.get_all_products(),
                         "status":200})
                         
     @jwt_required
+    @admin_only
     def post(self):
         """Saves a new product item"""
         product_name = request.get_json("product_name")["product_name"].strip(" ")
@@ -57,12 +60,14 @@ class SingleProduct(Resource, Product):
         pass
 
     @jwt_required
+    @token_required
     def get(self, product_id):
         """Gets a single product"""
         		        
         return self.get_single_product(product_id)
 
     @jwt_required
+    @admin_only
     def put(self, product_id):
         """Endpoint to update a product"""
 
@@ -74,16 +79,7 @@ class SingleProduct(Resource, Product):
 
         current_user = get_jwt_identity()["username"].lower()
         print(current_user)
-
-        role_claim=get_jwt_claims()["role"].lower()
-        print(role_claim)
-        if role_claim !="admin":
-            # print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
-
+        
         product= {
             "product_id": product_id,
             "product_name": product_name,
@@ -98,16 +94,9 @@ class SingleProduct(Resource, Product):
         return self.update_product(**product)
 
     @jwt_required
+    @admin_only
     def delete(self, product_id):
         """End point to delete product"""
-        role_claim=get_jwt_claims()["role"].lower()
-        print(role_claim)
-        if role_claim !="admin":
-            # print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
-
+        
         return self.delete_product(product_id)
         

@@ -5,6 +5,7 @@ from Instance.config import app_config
 from settings import load_env_var
 from db import tables
 from flask_jwt_extended import JWTManager 
+from app.api.v2.utils.error_handlers import *
 
 def create_app(config_name):
 	"""This function returns an instance of the API"""
@@ -29,6 +30,11 @@ def create_app(config_name):
 	from .api.v2 import auth_blueprint_v2 as auth_bp_v2
 	storemanager.register_blueprint(auth_bp_v2) 
 
+	# Add app error handlers
+	storemanager.register_error_handler(404, resource_not_found)
+	storemanager.register_error_handler(500, internal_server_error)
+	storemanager.register_error_handler(405, method_not_allowed)
+	storemanager.register_error_handler(401, missing_auth_header)
 		
 	@jwt.user_claims_loader
 	def add_claim_to_access_token(user_identity):
