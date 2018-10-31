@@ -23,7 +23,7 @@ class Products(Resource, Product):
                         
     @jwt_required
     @admin_only
-    @expects_json(new_product_schema)
+    @expects_json(product_schema)
     def post(self):
         """Saves a new product item"""
         product_name = request.get_json("product_name")["product_name"].strip(" ")
@@ -68,7 +68,7 @@ class SingleProduct(Resource, Product):
 
     @jwt_required
     @admin_only
-    @expects_json(update_product_schema)
+    @expects_json(product_schema)
     def put(self, product_id):
         """Endpoint to update a product"""
 
