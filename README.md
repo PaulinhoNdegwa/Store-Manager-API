@@ -4,10 +4,6 @@
 
 # Store-Manager-API
 
-One Paragraph of project description goes here
-
-## Getting Started
-
 This project involves building a Store Manager app that is a RESTful API that will help a store owner and store attendants manage their store
 
 ### Features Included:
