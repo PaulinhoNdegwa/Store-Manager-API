@@ -3,7 +3,8 @@ from flask_restful import  Resource
 from ..models.user_models import User
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
 from ..utils.decorators import admin_only, atttendant_only, token_required
-
+from flask_expects_json import expects_json
+from ..utils.json_schemas import update_role_schema
 
 class Users(Resource, User):
     """This class provides access to operations to GET and POST on users"""
@@ -30,37 +31,27 @@ class SingleUser(Resource, User):
     @token_required
     def get(self, user_id):
         """Gets a single user"""
-        
-        try:
-            user = get_jwt_identity()["username"].lower()
-            print(user)
-            print(user_id)
-            print(isinstance(int(user_id), int))
-            "if not isinstance(user_id, int):"
-                
-            user_exists =  self.user.get_user_by_id(user_id)
+        user = get_jwt_identity()["username"].lower()
+                    
+        user_exists =  self.user.get_user_by_id(user_id)
 
-            if not user_exists:
-                return jsonify({"message":"User not found",
-                                "status": 404})
-            user = {
-                "User Id": user_exists[0],
-                "Email": user_exists[1],
-                "Role": user_exists[3]
-            }
-            return jsonify({
-                        "Message":"Successful",
-                        "User" : user,
-                        "status" : 200
-                        })
-
-        except:
-            """Create an exception if try fails"""
-            return jsonify({"message":"Please provide a valid user id(int)",
-                                "status":400})
+        if not user_exists:
+            return jsonify({"message":"User not found",
+                            "status": 404})
+        user = {
+            "User Id": user_exists[0],
+            "Email": user_exists[1],
+            "Role": user_exists[3]
+        }
+        return jsonify({
+                    "Message":"Successful",
+                    "User" : user,
+                    "status" : 200
+                    })
 
     @jwt_required
     @admin_only
+    @expects_json(update_role_schema)
     def put(self, user_id):
         """Allows admin to set Attendant as admin"""
 

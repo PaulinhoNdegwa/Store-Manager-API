@@ -84,11 +84,18 @@ class User():
                 return jsonify({"message":"User already exists",
                                 "status": 400})
             else:
-                cur.execute("INSERT INTO users(username, password, role) VALUES (%s,%s,%s) ", (email, password, role,))            
+                cur.execute("INSERT INTO users(username, password, role) VALUES (%s,%s,%s) RETURNING user_id, username, role ", (email, password, role,))            
+                user = cur.fetchone()
+                
+                new_user = {
+                    "User_id": user[0],
+                    "Email": user[1],
+                    "Role": user[2]
+                }
                 close_connection(conn)
                 return jsonify({
-                    "message":"User saved",
-                    "email":email,
+                    "Message":"User saved",
+                    "User":new_user,
                     "status": 201
                 })   
             
@@ -101,9 +108,12 @@ class User():
         """Method to log in a user"""
 
         if not request.get_json:
-            return jsonify("Data must be in json format")
+            return jsonify({"message":"Data must be in json format",
+                            "status": 400})
+
         if not email or not password:
-            return jsonify("You must provide username and password")
+            return jsonify({"message":"You must provide email and password",
+                            "status": 400})
             
         valid_email = self.validate_email(email)
         if valid_email != True:
@@ -177,7 +187,7 @@ class User():
                 "Users": users_list,
                 "status":200
             })
-        except (Exception, psycopg2.DatabaseError) as error:
+        except (Exception, psycopg2.DatabaseError):
             return jsonify({
             "message":"Could not get all users",
             "status": 400

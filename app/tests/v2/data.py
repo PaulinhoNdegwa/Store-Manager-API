@@ -83,3 +83,14 @@ empty_sale_details = {
 new_role = {
     "role":"admin"
 }
+
+#headers 
+access_token = "" 
+header_with_token = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + access_token
+}
+
+header_without_token = {
+    'Content-Type': 'application/json'
+}

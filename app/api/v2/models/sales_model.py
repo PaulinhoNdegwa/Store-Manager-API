@@ -20,17 +20,19 @@ class Sale():
         close_connection(conn)
         return product_exists
 
-    def create_sale(self, product_id, quantity, total_price):
+    def create_sale(self, product_id, quantity, total_price, created_by):
         """Method to create sale record to DB"""
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("INSERT INTO sales(product_id, quantity, total_price) VALUES (%s, %s, %s) RETURNING product_id, quantity, total_price",(product_id, quantity, total_price,))
+            cur.execute("INSERT INTO sales(product_id, quantity, total_price, created_by) VALUES (%s, %s, %s, %s) RETURNING product_id, quantity, total_price, created_by",
+                        (product_id, quantity, total_price, created_by,))
             new_sale = cur.fetchone()
             sale = {
                 "Product Id":new_sale[0],
                 "Quantity": new_sale[1],
-                "Total Price": new_sale[2]
+                "Total Price": new_sale[2],
+                "Created_by": new_sale[3]
             }
             close_connection(conn)
             return jsonify({"message":"Successfully saved",
@@ -48,7 +50,7 @@ class Sale():
         cur.execute("UPDATE products SET quantity = %s WHERE product_id = %s",(new_quantity, product_id,))
         close_connection(conn)
 
-    def save_sale(self, product_name, product_model, quantity):
+    def save_sale(self, product_name, product_model, quantity, current_user):
         
         if product_name=="" or not product_name:
             return jsonify({"message":"You must provide product details",
@@ -72,7 +74,7 @@ class Sale():
         product_id = product_exists[0][0]
         self.subtract_products(new_quantity, product_id)
         
-        return self.create_sale(product_id, quantity, total_price)
+        return self.create_sale(product_id, quantity, total_price, current_user)
 
 
     def get_single_sale(self, sale_id):

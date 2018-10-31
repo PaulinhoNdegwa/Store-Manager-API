@@ -81,10 +81,11 @@ def atttendant_only(f):
                 "Status": 401
             })
         role_claim=get_jwt_claims()["role"].lower()
+        print(role_claim)
         if role_claim !="attendant":
-            print("not admin")
+            print("not attendant")
             return jsonify({
-                "message":"Unauthorized! You are not an admin",
+                "message":"Unauthorized! You are not an attendant",
                 "status":401
             })
         return f(*args, **kwargs)

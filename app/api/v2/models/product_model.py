@@ -66,7 +66,7 @@ class Product():
             return jsonify({"message":"You must provide product details",
                             "status":400})
         
-        if not request.json:
+        if not request.get_json:
             return jsonify({"message":"Input should be in json format",
                             "status":400})
         product_exist = self.get_product_by_id(product_id)
@@ -75,12 +75,14 @@ class Product():
         if not product_exist:
             return jsonify({"message":"Product does not exist",
                             "status":404})
+
+        new_quantity = product_exist[5] + quantity
         conn = open_connection()
         cur = conn.cursor()
         cur.execute("""UPDATE products set product_name=%s, product_model=%s, unit_price=%s, quantity=%s, 
                     min_quantity=%s, created_by=%s WHERE product_id=%s RETURNING product_id, product_name,
                      product_model, unit_price, quantity, min_quantity, created_by""",
-                    (product_name, model, product_price, quantity, min_quantity, created_by, product_id, ))
+                    (product_name, model, product_price, new_quantity, min_quantity, created_by, product_id, ))
         updated_product = cur.fetchone()
         product = {
             "Product Id":updated_product[0],
@@ -119,9 +121,9 @@ class Product():
             "product_id":product_exist[0],
             "product_name":product_exist[1],
             "product_model":product_exist[2],
-            "unit":product_exist[3],
-            "quantity":product_exist[4],
-            "min quantity":product_exist[5]
+            "unit":product_exist[4],
+            "quantity":product_exist[5],
+            "min quantity":product_exist[6]
         }
         return jsonify({"message":"Successful",
                         "product":product,

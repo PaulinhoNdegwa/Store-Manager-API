@@ -27,7 +27,7 @@ create_tables_queries = [
     )""",
     """CREATE TABLE IF NOT EXISTS sales(
         sale_id SERIAL PRIMARY KEY NOT NULL,
-        product_id INT NOT NULL references products(product_id),
+        product_id INT NOT NULL references products(product_id) ON DELETE CASCADE,
         total_price INT NOT NULL,
         quantity INT NOT NULL,
         created_by VARCHAR NULL references users(username)

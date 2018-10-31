@@ -1,10 +1,12 @@
 from flask import abort, jsonify, request
-from flask_restful import  Resource
+from flask_restful import Resource
 from ..models.product_model import Product
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
-from ..utils.decorators import *
+from ..utils.decorators import admin_only, atttendant_only, token_required
+from flask_expects_json import expects_json
+from ..utils.json_schemas import new_product_schema, update_product_schema
 
-# product = Product()
+
 class Products(Resource, Product):
     """This class provides access to operations to GET and POST on products"""
 
@@ -21,6 +23,7 @@ class Products(Resource, Product):
                         
     @jwt_required
     @admin_only
+    @expects_json(new_product_schema)
     def post(self):
         """Saves a new product item"""
         product_name = request.get_json("product_name")["product_name"].strip(" ")
@@ -30,16 +33,7 @@ class Products(Resource, Product):
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
         current_user = get_jwt_identity()["username"].lower()
-
-        role_claim=get_jwt_claims()["role"].lower()
-        print(role_claim)
-        if role_claim !="admin":
-            # print("not admin")
-            return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
-            })
-        
+       
         product= {
             "product_name": product_name,
             "model": model,
@@ -68,6 +62,7 @@ class SingleProduct(Resource, Product):
 
     @jwt_required
     @admin_only
+    @expects_json(update_product_schema)
     def put(self, product_id):
         """Endpoint to update a product"""
 

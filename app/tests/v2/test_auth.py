@@ -2,7 +2,8 @@ from app.tests.v2.basetest import BaseTest
 from flask import json
 import pytest_timeout
 import pytest
-from .data import admin_login, signup_details, login_details, invalid_email
+from .data import (admin_login, signup_details, login_details,
+                 invalid_email, header_with_token, header_without_token)
 
 class AuthTestCase(BaseTest):
     """Authentication test suite"""
@@ -12,9 +13,11 @@ class AuthTestCase(BaseTest):
         """Function to test successful signup"""
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/auth/login", data=json.dumps(admin_login), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         response = self.client.post("/api/v2/auth/signup", data=json.dumps(signup_details), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
 
     @pytest.mark.timeout(30)
@@ -23,9 +26,11 @@ class AuthTestCase(BaseTest):
 
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/auth/login", data=json.dumps(admin_login), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         response = self.client.post("/api/v2/auth/signup", data=json.dumps(invalid_email), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 400)
     
     @pytest.mark.timeout(30)
@@ -37,9 +42,12 @@ class AuthTestCase(BaseTest):
                 }
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/auth/login", data=json.dumps(admin_login), 
-                headers=dict(Authorization= "Bearer "+access_token))
-        self.client.post("/api/v2/auth/signup", data=json.dumps(signup_details))              
-        response = self.client.post("/api/v2/auth/login", data=json.dumps(user))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
+        self.client.post("/api/v2/auth/signup", data=json.dumps(signup_details),
+                        headers=header_without_token)              
+        response = self.client.post("/api/v2/auth/login", data=json.dumps(user),
+                        headers=header_without_token)
         self.assertEqual(json.loads(response.data)["status"], 400)
 
     @pytest.mark.timeout(30)
@@ -47,6 +55,8 @@ class AuthTestCase(BaseTest):
         """Function to test successful login"""
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/auth/signup", data=json.dumps(signup_details), 
-                headers=dict(Authorization= "Bearer "+access_token))      
-        response = self.client.post("/api/v2/auth/login", data=json.dumps(login_details))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})      
+        response = self.client.post("/api/v2/auth/login", data=json.dumps(login_details),
+                        headers=header_without_token)
         self.assertEqual(json.loads(response.data)["status"], 200)
