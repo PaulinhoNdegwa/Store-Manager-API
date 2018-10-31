@@ -4,19 +4,59 @@
 
 # Store-Manager-API
 
+One Paragraph of project description goes here
 
-This project involves building API endpoints for a Store Manager app. The following endpoints are the minimun required
+## Getting Started
 
-EndPoint	Functionality	Notes
+This project involves building a Store Manager app that is a RESTful API that will help a store owner and store attendants manage their store
 
-GET /products	Fetch all products	Get all available products.
+### Features Included:
 
-GET /products/<productId>	Fetch a single product record	Get a specific product using the product’s id.
-  
-GET /sales	Fetch all sale records	Get all sale records. This endpoint should be accessible to only the store owner/admin.
+1. Store admin can create other app users
+2. Store owner/admin can signin/signout
+3. Store admin can create, update and delete products
+4. Store attendant can add sales
+5. Store owner/attendant can view single users
+6. Store attendant can view all sales
+7. Store owner can view all users
 
-GET /sales/<saleId>	Fetch a single sale record	Get a specific sale record using the sale record Id. This endpoint should be accessible to only the store owner/admin and the creator (store attendant) of the specific sale record.
-  
-POST /products	Create a product	Create a new product record. This endpoint should be accessible to only the store owner/admin.
+### Installing
 
-POST /sales	Create a sale order	Create a sale record. This endpoint is accessible to only the store attendant.
+Clone the repository [```here```](https://github.com/PaulinhoNdegwa/Store-Manager-API) or 
+
+```$ git clone https://github.com/PaulinhoNdegwa/Store-Manager-API.git ```
+
+cd into Store-Manager-API
+
+Create a virtual environment
+
+```$ virtualenv venv -p python3 ```
+
+Activate Virtual Environment
+
+```$ source venv/bin/activate ```
+
+Install project dependencies 
+
+
+```$ pip install -r requirements.txt```
+
+#### Running the application
+
+```$ python run.py ```
+
+
+
+#### Testing
+
+```$  pytest --cov=app ```
+
+
+## Authors
+
+* **Paul Gichuki** - *Initial work* - [PaulinhoNdegwa](https://github.com/PaulinhoNdegwa)
+
+
+## Acknowledgments
+
+* Thanks to everyone who helped in the development of this project
