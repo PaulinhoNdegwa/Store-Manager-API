@@ -2,7 +2,7 @@ from app.tests.v2.basetest import BaseTest
 from flask import json
 import pytest
 import pytest_timeout
-from .data import *
+from .data import new_category, update_category, invalid_category
 
 class CategoryTestCase(BaseTest):
     """This is a test suite for categories"""
@@ -12,7 +12,8 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticateAdmin()
         response = self.client.post("/api/v2/category", data=json.dumps(new_category),
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
 
     def test_create_with_no_cat_name(self):
@@ -20,7 +21,8 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticateAdmin()
         response = self.client.post("/api/v2/category", data=json.dumps(invalid_category),
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 400)
 
     def test_create_cat_as_attendant(self):
@@ -28,16 +30,19 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticate()
         response = self.client.post("/api/v2/category", data=json.dumps(new_category),
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 401)
     
     def test_update_category(self):
         """This method tests for the successful update of a category"""
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/category", data=json.dumps(new_category),
-                headers=dict(Authorization= "Bearer "+access_token))        
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})        
         response = self.client.put("/api/v2/category/1", data=json.dumps(update_category),
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
 
     def test_delete_category_as_attendant(self):
@@ -45,7 +50,8 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticate()
         response = self.client.delete("/api/v2/category/1", 
-                    headers=dict(Authorization= "Bearer "+access_token))
+                    headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 401)
 
     def test_delete_unavailable_category(self):
@@ -53,7 +59,8 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticateAdmin()
         response = self.client.delete("/api/v2/category/1", 
-                    headers=dict(Authorization= "Bearer "+access_token))
+                    headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 404)
 
     def test_successfully_delete_category(self):
@@ -61,7 +68,9 @@ class CategoryTestCase(BaseTest):
 
         access_token = self.authenticateAdmin()
         self.client.post("/api/v2/category", data=json.dumps(new_category),
-                headers=dict(Authorization= "Bearer "+access_token))
+                    headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         response = self.client.delete("/api/v2/category/1", 
-                    headers=dict(Authorization= "Bearer "+access_token))
+                    headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)

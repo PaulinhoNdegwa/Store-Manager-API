@@ -6,6 +6,8 @@ from psycopg2 import Error
 import psycopg2
 from ..models.category_model import Category
 from ..utils.decorators import admin_only, token_required
+from flask_expects_json import expects_json
+from ..utils.json_schemas import category_schema
 
 class Categories(Resource, Category):
     """Creates the endpoint for categories"""
@@ -13,19 +15,21 @@ class Categories(Resource, Category):
     def __init__(self):
         """Initializes a category object"""
         self.category = Category()
+        
     @jwt_required
     @admin_only
+    @expects_json(category_schema)
     def post(self):
         """Endpoint to add a new category"""
         cat_name = request.get_json("cat_name")["cat_name"].strip(" ")
         description = request.get_json("desc")["desc"].strip(" ")
 
-
-        if not request.get_json:
+        if not cat_name or not description:
             return jsonify({
-                "message":"Data should be in json format",
-                "status":400
+                "message":"Category name and description are required",
+                "status": 400
             })
+        
         
         return self.category.save_category(cat_name, description)    
         
@@ -36,14 +40,21 @@ class SingleCategory(Resource, Category):
     def __init__(self):
         """Initializes a category object"""
         self.category = Category()
+
     @jwt_required
     @admin_only
+    @expects_json(category_schema)
     def put(self, cat_id):
         """Endpoint to delete a category"""
         cat_name = request.get_json("cat_name")["cat_name"].strip()
         cat_desc = request.get_json("desc")["desc"]
-
         
+        if not cat_name or not cat_desc:
+            return jsonify({
+                "message":"Category name and description are required",
+                "status": 400
+            })
+
         return self.category.update_category(cat_id, cat_name, cat_desc)
             
     @jwt_required

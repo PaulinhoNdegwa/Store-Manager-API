@@ -48,15 +48,8 @@ class User():
         return True
 
     def save_user(self, email, password, confirm_password, role):
+        """Method to save user"""
         
-        if not request.get_json:
-            return jsonify({"message":"Data must be in json format",
-                            "status": 400})
-
-        if not email or not password or not confirm_password:
-            return jsonify({"message":"You must provide email and password",
-                            "status": 400})
-
         valid_email = self.validate_email(email)
         if valid_email != True:
             return valid_email
@@ -84,11 +77,18 @@ class User():
                 return jsonify({"message":"User already exists",
                                 "status": 400})
             else:
-                cur.execute("INSERT INTO users(username, password, role) VALUES (%s,%s,%s) ", (email, password, role,))            
+                cur.execute("INSERT INTO users(username, password, role) VALUES (%s,%s,%s) RETURNING user_id, username, role ", (email, password, role,))            
+                user = cur.fetchone()
+                
+                new_user = {
+                    "User_id": user[0],
+                    "Email": user[1],
+                    "Role": user[2]
+                }
                 close_connection(conn)
                 return jsonify({
-                    "message":"User saved",
-                    "email":email,
+                    "Message":"User saved",
+                    "User":new_user,
                     "status": 201
                 })   
             
@@ -100,11 +100,6 @@ class User():
     def user_login(self, email, password):
         """Method to log in a user"""
 
-        if not request.get_json:
-            return jsonify("Data must be in json format")
-        if not email or not password:
-            return jsonify("You must provide username and password")
-            
         valid_email = self.validate_email(email)
         if valid_email != True:
             return valid_email
@@ -177,7 +172,7 @@ class User():
                 "Users": users_list,
                 "status":200
             })
-        except (Exception, psycopg2.DatabaseError) as error:
+        except (Exception, psycopg2.DatabaseError):
             return jsonify({
             "message":"Could not get all users",
             "status": 400
@@ -233,6 +228,12 @@ class User():
 
     def update_role(self, user_id, role):
         """This method sets a user account to Admin"""
+
+        if not role:
+            return jsonify({
+                "message":"Role required",
+                "status": 400
+            })
 
         user_exists = self.get_user_by_id(user_id)
 

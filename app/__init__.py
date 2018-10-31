@@ -16,7 +16,6 @@ def create_app(config_name):
 
 	storemanager.url_map.strict_slashes = False
 	storemanager.config.from_object(app_config[config_name])
-	# storemanager.config["TESTING"] = True
 
 	from .api.v1 import version_1 as v1
 	storemanager.register_blueprint(v1)

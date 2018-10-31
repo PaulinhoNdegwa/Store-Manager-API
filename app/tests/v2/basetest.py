@@ -2,7 +2,7 @@ import unittest
 from flask import json
 from db import tables
 from app import create_app
-from .data import signup_details, admin_login, login_details
+from .data import signup_details, admin_login, login_details, header_without_token
 
 
 config_name = "testing"
@@ -17,8 +17,10 @@ class BaseTest(unittest.TestCase):
         
         
     def authenticateAdmin(self):
+        print(admin_login)
         response = self.client.post("api/v2/auth/login", 
-                    data=json.dumps(admin_login))
+                    data=json.dumps(admin_login), 
+                    headers=header_without_token)
         access_token = json.loads(response.data)["token"]
         # print("Admin token",access_token)
         return access_token
@@ -26,9 +28,10 @@ class BaseTest(unittest.TestCase):
     def authenticate(self):
         access_token = self.authenticateAdmin()
         self.client.post("api/v2/auth/signup", data=json.dumps(signup_details),
-                        headers=dict(Authorization= "Bearer "+access_token))
-        response = self.client.post("api/v2/auth/login", 
-                        data=json.dumps(login_details))
+                        headers={'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + access_token})
+        response = self.client.post("api/v2/auth/login", data=json.dumps(login_details),
+                        headers=header_without_token)
         access_token = json.loads(response.data)["token"]
         # print("Attendant",access_token)
         return access_token    

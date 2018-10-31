@@ -15,10 +15,12 @@ def connect_db():
     except (Exception, psycopg2.DatabaseError) as error:
         print("Could not connect with database", error)
 
+
 def open_connection():
     "Function to open connection"
     conn = connect_db()
     return conn
+    
 
 def close_connection(conn):
     """Closes connection after queries"""

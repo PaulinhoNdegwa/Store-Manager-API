@@ -10,9 +10,11 @@ class SalesTestCase(BaseTest):
         access_token_2 = self.authenticateAdmin()
         access_token = self.authenticate()
         self.client.post("/api/v2/products", data=json.dumps(product), 
-                headers=dict(Authorization= "Bearer "+access_token_2))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token_2})
         response = self.client.post("/api/v2/sales", data=json.dumps(sale), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
 
     def test_get_sales(self):
@@ -20,18 +22,22 @@ class SalesTestCase(BaseTest):
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
         self.client.post("/api/v2/products", data=json.dumps(product), 
-                headers=dict(Authorization= "Bearer "+access_token_2))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token_2})
         self.client.post("/api/v2/sales", data=json.dumps(sale), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         response = self.client.get( "/api/v2/sales",
-                headers=dict(Authorization= "Bearer "+access_token_2))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token_2})
         self.assertEqual(json.loads(response.data)["status"], 200)
 
     def test_empty_sale(self):
         access_token = self.authenticate()
         
         response = self.client.post("/api/v2/sales", data=json.dumps(empty_sale_details), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 400)
 
     def test_get_one_sale(self):
@@ -39,11 +45,14 @@ class SalesTestCase(BaseTest):
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
         self.client.post("/api/v2/products", data=json.dumps(product), 
-                headers=dict(Authorization= "Bearer "+access_token_2))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token_2})
         response = self.client.post("/api/v2/sales", data=json.dumps(sale), 
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         response = self.client.get( "/api/v2/sales/1",
-                headers=dict(Authorization= "Bearer "+access_token_2))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token_2})
         self.assertEqual(json.loads(response.data)["status"], 200)
 
     
@@ -51,7 +60,8 @@ class SalesTestCase(BaseTest):
         """"Test GET inexistent sale order """
         access_token = self.authenticateAdmin()
         response = self.client.get( "/api/v2/sales/9",
-                headers=dict(Authorization= "Bearer "+access_token))
+                headers={'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 404)
 
     # def test_update_sale(self):
