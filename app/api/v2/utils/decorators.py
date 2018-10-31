@@ -7,14 +7,15 @@ from app.api.v2.models.user_models import User
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        """This methos checks for the presence of a token in the Authorization header"""
+        """This methoD checks for the presence of a token in
+        the Authorization header"""
         token = None
-        if "Authorization" in request.headers:            
+        if "Authorization" in request.headers:
             token = request.headers["Authorization"]
             print(token)
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in and try again",
+                "Message": "Unsuccessful, token is required. Log in",
                 "Status": 401
             })
         user_object = User()
@@ -34,11 +35,11 @@ def admin_only(f):
         """This decorator protects admin only routes"""
 
         token = None
-        if "Authorization" in request.headers:            
+        if "Authorization" in request.headers:
             token = request.headers["Authorization"]
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in and try again",
+                "Message": "Unsuccessful, token is required. Log in",
                 "Status": 401
             })
         user_object = User()
@@ -48,13 +49,13 @@ def admin_only(f):
                 "Message": "Unsuccessful, token is invalid. Log in again",
                 "Status": 401
             })
-            
-        role_claim=get_jwt_claims()["role"].lower()
-        if role_claim !="admin":
+
+        role_claim = get_jwt_claims()["role"].lower()
+        if role_claim != "admin":
             print("not admin")
             return jsonify({
-                "message":"Unauthorized! You are not an admin",
-                "status":401
+                "message": "Unauthorized! You are not an admin",
+                "status": 401
             })
         return f(*args, **kwargs)
     return decorated
@@ -64,13 +65,13 @@ def atttendant_only(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         """This decorator protects attendant only routes"""
-        
+
         token = None
-        if "Authorization" in request.headers:            
+        if "Authorization" in request.headers:
             token = request.headers["Authorization"]
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in and try again",
+                "Message": "Unsuccessful, token is required. Log in",
                 "Status": 401
             })
         user_object = User()
@@ -80,13 +81,13 @@ def atttendant_only(f):
                 "Message": "Unsuccessful, token is invalid. Log in again",
                 "Status": 401
             })
-        role_claim=get_jwt_claims()["role"].lower()
+        role_claim = get_jwt_claims()["role"].lower()
         print(role_claim)
-        if role_claim !="attendant":
+        if role_claim != "attendant":
             print("not attendant")
             return jsonify({
-                "message":"Unauthorized! You are not an attendant",
-                "status":401
+                "message": "Unauthorized! You are not an attendant",
+                "status": 401
             })
         return f(*args, **kwargs)
     return decorated

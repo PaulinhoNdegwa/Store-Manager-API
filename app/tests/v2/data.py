@@ -1,45 +1,45 @@
 
-####################CATEGORY TEST DATA#######################
-new_category ={
-    "cat_name":"Phones",
-    "desc":"Category for mobile phones"
+# ###################CATEGORY TEST DATA#######################
+new_category = {
+    "cat_name": "Phones",
+    "desc": "Category for mobile phones"
 }
 
 invalid_category = {
-    "cat_name":" ",
-    "desc":"Category for mobile phones"
+    "cat_name": " ",
+    "desc": "Category for mobile phones"
 }
 
 update_category = {
-    "cat_name":"Mobile Phones",
-    "desc":"Category for mobile phones"
+    "cat_name": "Mobile Phones",
+    "desc": "Category for mobile phones"
 }
 
-####################AUTHENTICATION TEST DATA#######################
+# ###################AUTHENTICATION TEST DATA#######################
 admin_login = {
-        "email":"admin@gmail.com",
-        "password":"Qwerty1"
-    }
+    "email": "admin@gmail.com",
+    "password": "Qwerty1"
+}
 signup_details = {
-        "email":"paul@gmail.com",
-        "password":"1234QWEr",
-        "confirm_password":"1234QWEr",
-        "role": "Attendant"
-    }
+    "email": "paul@gmail.com",
+    "password": "1234QWEr",
+    "confirm_password": "1234QWEr",
+    "role": "Attendant"
+}
 
 login_details = {
-        "email":"paul@gmail.com",
-        "password":"1234QWEr"
-    }
+    "email": "paul@gmail.com",
+    "password": "1234QWEr"
+}
 invalid_email = {
-        "email": "paulgmail.com",
-        "password": "1234",
-        "confirm_password":"1234",
-        "role":"Admin"
-      
+    "email": "paulgmail.com",
+    "password": "1234",
+    "confirm_password": "1234",
+    "role": "Admin"
+
 }
 
-####################PRODUCT TEST DATA#######################
+# ###################PRODUCT TEST DATA#######################
 product = {
     "product_name": "macbook",
     "model": "g3",
@@ -56,36 +56,36 @@ product_update = {
     "min_quantity": 10
 }
 empty_product_details = {
-    "product_name":" ",
-    "model":" ",
-    "product_price":1200,
+    "product_name": " ",
+    "model": " ",
+    "product_price": 1200,
     "quantity": 13,
     "min_quantity": 10
 }
-####################SALE TEST DATA#######################
+# ###################SALE TEST DATA#######################
 sale = {
     "product_name": "macbook",
-    "product_model":"g3",
+    "product_model": "g3",
     "quantity": 5
 }
 
 sale_update = {
     "product_name": "HP",
-    "model":"15",
+    "model": "15",
     "quantity": 7
 }
 empty_sale_details = {
-    "product_name":" ",
-    "product_model":" ",
+    "product_name": " ",
+    "product_model": " ",
     "quantity": 5
 }
-####################USERS TEST DATA#######################
+# ###################USERS TEST DATA#######################
 new_role = {
-    "role":"admin"
+    "role": "admin"
 }
 
-#headers 
-access_token = "" 
+# headers
+access_token = ""
 header_with_token = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + access_token

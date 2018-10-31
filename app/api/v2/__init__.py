@@ -4,12 +4,13 @@ from .views.product_views import Products, SingleProduct
 from .views.sales_views import Sales, SingleSale
 from .views.users_views import Users, SingleUser
 from .views.auth_views import Register, Login, Logout
-from .views.cat_views import Categories, SingleCategory 
+from .views.cat_views import Categories, SingleCategory
 
 version_2 = Blueprint("api_v2", __name__, url_prefix="/api/v2")
 api_v2 = Api(version_2)
 
-auth_blueprint_v2 = Blueprint("api_auth_v2", __name__, url_prefix="/api/v2/auth")
+auth_blueprint_v2 = Blueprint("api_auth_v2", __name__,
+                              url_prefix="/api/v2/auth")
 auth_api_v2 = Api(auth_blueprint_v2)
 
 api_v2.add_resource(Products, "/products")
