@@ -4,7 +4,7 @@ from ..models.product_model import Product
 from flask_jwt_extended import jwt_required, get_jwt_claims, get_jwt_identity
 from ..utils.decorators import admin_only, atttendant_only, token_required
 from flask_expects_json import expects_json
-from ..utils.json_schemas import new_product_schema, update_product_schema
+from ..utils.json_schemas import product_schema
 
 
 class Products(Resource, Product):
@@ -34,7 +34,7 @@ class Products(Resource, Product):
 
         if not product_name or not model or not product_price or not quantity or not min_quantity:
             return jsonify({
-                "message":"Product_name, model, product_price, quantity, min_quantity are required",
+                "message":"All fields are required",
                 "status": 400
             })
 
@@ -80,7 +80,7 @@ class SingleProduct(Resource, Product):
 
         if not product_name or not model or not product_price or not quantity or not min_quantity:
             return jsonify({
-                "message":"Product_name, model, product_price, quantity, min_quantity are required",
+                "message":"Check all required fields",
                 "status": 400
             })
 

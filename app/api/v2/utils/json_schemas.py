@@ -18,7 +18,7 @@ login_schema = {
     "required": ["email", "password"]
 }
 
-new_product_schema = {
+product_schema = {
     "type": "object",
     "properties": {
         "product_name": {type: "string"},
@@ -26,18 +26,6 @@ new_product_schema = {
         "product_price": {type: "integer"},
         "quantity": {type: "integer"},
         "min_quantity": {type: "integer"}      
-    },
-    "required": ["product_name", "model", "product_price", "quantity", "min_quantity"]
-}
-
-update_product_schema = {
-    "type": "object",
-    "properties": {
-        "product_name": {type: "string"},
-        "model": {type: "string"},
-        "product_price": {type: "integer"},
-        "quantity": {type: "integer"},
-        "min_quantity": {type: "integer"}       
     },
     "required": ["product_name", "model", "product_price", "quantity", "min_quantity"]
 }
