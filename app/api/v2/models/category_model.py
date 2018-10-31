@@ -11,12 +11,6 @@ class Category():
 
     def save_category(self, cat_name, description):
         """Method to save a product"""
-
-        if not cat_name or cat_name=="" or not description or description=="":
-            return jsonify({
-                "message":"Enter a category and description",
-                "status":400
-            })
         
         try:
             conn = open_connection()

@@ -32,6 +32,12 @@ class Products(Resource, Product):
         quantity = request.get_json("quantity")["quantity"]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
+        if not product_name or not model or not product_price or not quantity or not min_quantity:
+            return jsonify({
+                "message":"Product_name, model, product_price, quantity, min_quantity are required",
+                "status": 400
+            })
+
         current_user = get_jwt_identity()["username"].lower()
        
         product= {
@@ -71,6 +77,13 @@ class SingleProduct(Resource, Product):
         product_price = request.get_json("product_price")["product_price"]
         quantity = request.get_json("quantity")["quantity"]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
+
+        if not product_name or not model or not product_price or not quantity or not min_quantity:
+            return jsonify({
+                "message":"Product_name, model, product_price, quantity, min_quantity are required",
+                "status": 400
+            })
+
 
         current_user = get_jwt_identity()["username"].lower()
         print(current_user)

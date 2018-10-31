@@ -30,6 +30,13 @@ class Sales(Resource, Sale):
         product_name = data["product_name"].strip(" ")
         product_model = data["product_model"].strip(" ")
         quantity = data["quantity"]
+
+        
+        if not product_name or not product_model or not quantity:
+            return jsonify({
+                "message":"Product_name, product_model, quantity are required",
+                "status": 400
+            })
         
         current_user = get_jwt_identity()["username"]
 

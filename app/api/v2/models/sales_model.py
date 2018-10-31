@@ -25,18 +25,19 @@ class Sale():
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("INSERT INTO sales(product_id, quantity, total_price, created_by) VALUES (%s, %s, %s, %s) RETURNING product_id, quantity, total_price, created_by",
+            cur.execute("INSERT INTO sales(product_id, quantity, total_price, created_by) VALUES (%s, %s, %s, %s) RETURNING product_id, quantity, total_price, created_by, sale_id",
                         (product_id, quantity, total_price, created_by,))
             new_sale = cur.fetchone()
             sale = {
                 "Product Id":new_sale[0],
                 "Quantity": new_sale[1],
                 "Total Price": new_sale[2],
-                "Created_by": new_sale[3]
+                "Created_by": new_sale[3],
+                "Sale Id": new_sale[4]
             }
             close_connection(conn)
             return jsonify({"message":"Successfully saved",
-                        "Product id recorded": sale,
+                        "Sale recorded": sale,
                         "status": 201})
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -51,15 +52,8 @@ class Sale():
         close_connection(conn)
 
     def save_sale(self, product_name, product_model, quantity, current_user):
+        """Method to save sale"""
         
-        if product_name=="" or not product_name:
-            return jsonify({"message":"You must provide product details",
-                            "status":400})
-        
-        if not request.json:
-            return jsonify({"message":"Input should be in json format",
-                            "status":400})
-
         product_exists = self.get_pdt_by_name_and_model(product_name, product_model)
         print(product_exists)        
 
@@ -100,6 +94,7 @@ class Sale():
 
     def get_all_sales(self):
         """Method to return all products"""
+        
         conn = open_connection()
         cur = conn.cursor()
         cur.execute("SELECT * FROM sales ")

@@ -48,15 +48,8 @@ class User():
         return True
 
     def save_user(self, email, password, confirm_password, role):
+        """Method to save user"""
         
-        if not request.get_json:
-            return jsonify({"message":"Data must be in json format",
-                            "status": 400})
-
-        if not email or not password or not confirm_password:
-            return jsonify({"message":"You must provide email and password",
-                            "status": 400})
-
         valid_email = self.validate_email(email)
         if valid_email != True:
             return valid_email
@@ -107,14 +100,6 @@ class User():
     def user_login(self, email, password):
         """Method to log in a user"""
 
-        if not request.get_json:
-            return jsonify({"message":"Data must be in json format",
-                            "status": 400})
-
-        if not email or not password:
-            return jsonify({"message":"You must provide email and password",
-                            "status": 400})
-            
         valid_email = self.validate_email(email)
         if valid_email != True:
             return valid_email
@@ -243,6 +228,12 @@ class User():
 
     def update_role(self, user_id, role):
         """This method sets a user account to Admin"""
+
+        if not role:
+            return jsonify({
+                "message":"Role required",
+                "status": 400
+            })
 
         user_exists = self.get_user_by_id(user_id)
 

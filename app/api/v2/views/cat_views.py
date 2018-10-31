@@ -24,12 +24,12 @@ class Categories(Resource, Category):
         cat_name = request.get_json("cat_name")["cat_name"].strip(" ")
         description = request.get_json("desc")["desc"].strip(" ")
 
-
-        if not request.get_json:
+        if not cat_name or not description:
             return jsonify({
-                "message":"Data should be in json format",
-                "status":400
+                "message":"Category name and description are required",
+                "status": 400
             })
+        
         
         return self.category.save_category(cat_name, description)    
         
@@ -48,8 +48,13 @@ class SingleCategory(Resource, Category):
         """Endpoint to delete a category"""
         cat_name = request.get_json("cat_name")["cat_name"].strip()
         cat_desc = request.get_json("desc")["desc"]
-
         
+        if not cat_name or not cat_desc:
+            return jsonify({
+                "message":"Category name and description are required",
+                "status": 400
+            })
+
         return self.category.update_category(cat_id, cat_name, cat_desc)
             
     @jwt_required

@@ -23,8 +23,14 @@ class Register(Resource, User):
         confirm_password = data["confirm_password"]
         role = data["role"]
 
+        if not email or not password or not confirm_password or not role:
+            return jsonify({
+                "message":"Email, password and confirm password are required",
+                "status": 400
+            })
+        
+
         user = get_jwt_identity()["username"].lower()
-        print(user)
         
         return self.user.save_user(email, password, confirm_password, role)
             
@@ -40,6 +46,12 @@ class Login(Resource, User):
         data = request.get_json()
         email = data["email"]
         password = data["password"]
+
+        if not email or not password:
+            return jsonify({
+                "message":"Email and password are required",
+                "status": 400
+            })
 
         return self.user.user_login(email, password)
 
