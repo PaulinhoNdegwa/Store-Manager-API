@@ -8,10 +8,6 @@ class Sale():
     """This class initialized a sales object.
     Also it has a save method that saves the sale in a list"""
 
-    def __init__(self):
-        """Method to initialize sales"""
-        pass
-
     def get_pdt_by_name_and_model(self, product_name, product_model):
         """Get product by name and model"""
         conn = open_connection()
@@ -63,7 +59,6 @@ class Sale():
 
         product_exists = self.get_pdt_by_name_and_model(
             product_name, product_model)
-        print(product_exists)
 
         if not product_exists:
             return jsonify({"message": "Product not available",

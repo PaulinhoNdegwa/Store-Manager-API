@@ -23,6 +23,8 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["Message"],
+                         "Successful")
 
     def test_get_inexistent_user(self):
         """Test get inexistent user"""
@@ -32,6 +34,8 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 404)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "User not found")
 
     def test_get_users_as_attendant(self):
         """Test get users as attendant"""
@@ -41,6 +45,8 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Unauthorized! You are not an admin")
 
     def test_get_nonint_user_id(self):
         """Test get user using a nonint user_id"""
@@ -50,6 +56,8 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 404)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Resource not found. Please confirm the URL")
 
     def test_update_user_role(self):
         """This method tests the update of user role"""
@@ -61,6 +69,8 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "User role updated")
 
     def test_update_role_as_attendant(self):
         """This method tests the update of user role"""
@@ -71,3 +81,5 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Unauthorized! You are not an admin")

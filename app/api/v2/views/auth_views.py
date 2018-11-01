@@ -7,11 +7,13 @@ from ..utils.decorators import admin_only, atttendant_only, token_required
 from flask_expects_json import expects_json
 from ..utils.json_schemas import register_schema, login_schema
 
+user = User()
 
-class Register(Resource, User):
 
-    def __init__(self):
-        self.user = User()
+class Register(Resource):
+
+    # def __init__(self):
+    #     self.user = User()
 
     @jwt_required
     @admin_only
@@ -29,15 +31,10 @@ class Register(Resource, User):
                 "status": 400
             })
 
-        return self.user.save_user(email, password, confirm_password, role)
+        return user.save_user(email, password, confirm_password, role)
 
 
-class Login(Resource, User):
-    """Log in endpoint"""
-
-    def __init__(self):
-
-        self.user = User()
+class Login(Resource):
 
     @expects_json(login_schema)
     def post(self):
@@ -51,14 +48,11 @@ class Login(Resource, User):
                 "status": 400
             })
 
-        return self.user.user_login(email, password)
+        return user.user_login(email, password)
 
 
-class Logout(Resource, User):
+class Logout(Resource):
     """End point to log out a user"""
-
-    def __init__(self):
-        self.user = User()
 
     @jwt_required
     @token_required
@@ -66,4 +60,4 @@ class Logout(Resource, User):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
 
-            return self.user.blacklist_token(str(token))
+            return user.blacklist_token(str(token))

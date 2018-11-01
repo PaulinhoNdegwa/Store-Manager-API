@@ -17,6 +17,8 @@ class ProductTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
+        self.assertEqual(json.loads(response.data)["Message"],
+                         "Successfully saved")
 
     @pytest.mark.timeout(30)
     def test_get_products(self):
@@ -29,6 +31,7 @@ class ProductTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertIsInstance(json.loads(response.data)["Products"], list)
 
     @pytest.mark.timeout(30)
     def test_empty_product(self):
@@ -39,6 +42,8 @@ class ProductTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 400)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "All fields are required")
 
     @pytest.mark.timeout(30)
     def test_get_one_product(self):
@@ -52,6 +57,8 @@ class ProductTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token_2})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Successful")
 
     @pytest.mark.timeout(30)
     def test_product_already_exists(self):
@@ -64,6 +71,8 @@ class ProductTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 409)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Product already exists")
 
     @pytest.mark.timeout(30)
     def test_get_inexistent_product_id(self):
@@ -73,6 +82,8 @@ class ProductTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 404)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Product does not exist")
 
     @pytest.mark.timeout(30)
     def test_update_product(self):
@@ -85,6 +96,8 @@ class ProductTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Product successfully updated")
 
     @pytest.mark.timeout(30)
     def test_delete_product(self):
@@ -97,3 +110,5 @@ class ProductTestCase(BaseTest):
                                       headers={'Content-Type': 'application/json',
                                                'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Product successfully deleted")

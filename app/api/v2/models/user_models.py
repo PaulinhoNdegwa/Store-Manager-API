@@ -12,9 +12,6 @@ email_format = r"(^[a-zA-z0-9_.]+@[a-zA-z0-9-]+\.[a-z]+$)"
 class User():
     """This class initialized a user object."""
 
-    def __init__(self):
-        pass
-
     def validate_password(self, password):
         """Method to validate a password. A password must be between 6-8 characters,
         one lower case, one uppercase and a number"""
@@ -263,9 +260,37 @@ class User():
                 "Role": updated_user[2]
             }
 
-            return jsonify({"message": "User updated",
+            return jsonify({"message": "User role updated",
                             "User updated": user,
                             "status": 200})
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("Could not update user details", error)
+
+    def get_user_by_username(self, current_user):
+        """This method returns user details"""
+        try:
+            conn = open_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT user_id, username, role FROM users\
+                        WHERE username = %s", (current_user,))
+            profile = cur.fetchone()
+            close_connection(conn)
+            return profile
+        except Exception as e:
+            print(e)
+
+    def get_user_product_sales(self, current_user):
+        """This method return a user's product sales"""
+        try:
+            conn = open_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT products.product_id, products.product_name,\
+             products.product_model, sales.quantity, sales.total_price FROM \
+             products INNER JOIN sales ON products.product_id = \
+             sales.product_id WHERE sales.created_by = %s", (current_user,))
+            product_sales = cur.fetchall()
+            close_connection(conn)
+            return product_sales
+        except Exception as e:
+            print(e)
