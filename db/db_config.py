@@ -1,14 +1,17 @@
 import psycopg2
 import os
 from psycopg2 import Error
+from Instance.config import app_config
 
 
 def connect_db():
     """"Establishses connection with DB"""
-    # environ = app.config["ENV"]
-    database_url = os.getenv("DATABASE_URL_TEST")
-    # database_url = environ
-    # print(database_url)
+    config = os.getenv("APP_SETTINGS")
+    print(config)
+    if config != "testing" or config != "development":
+        database_url = os.environ['DATABASE_URL'], sslmode = 'require'
+    database_url = app_config[config].DATABASE_URL
+
     try:
         return psycopg2.connect(database_url)
 

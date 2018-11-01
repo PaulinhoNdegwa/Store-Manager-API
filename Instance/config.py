@@ -5,12 +5,13 @@ class Config(object):
     """This is the parent config class"""
     DEBUG = True
     SECRET_KEY = os.getenv("SECRET")
-    DATABASE_URL = os.getenv("DATABASE_URL_APP")
+    # DATABASE_URL = os.getenv("DATABASE_URL_APP")
 
 
 class DevelopmentConfiguration(Config):
     """These are the development configurations"""
     DEBUG = True
+    DATABASE_URL = os.getenv("DATABASE_URL_APP")
 
 
 class TestingConfiguration(Config):
