@@ -183,14 +183,15 @@ class User():
         try:
             conn = open_connection()
             cur = conn.cursor()
-            bearer_token = "Bearer " + token
-            # print(bearer_token)
+            bearer_token = str(token)
             cur.execute("SELECT * FROM blacklist WHERE  token = %s",
                         (bearer_token,))
             token_available = cur.fetchone()
+            if token_available:
+                return True
             close_connection(conn)
 
-            return token_available
+            return False
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("Could not lookup token", error)
@@ -200,6 +201,7 @@ class User():
         try:
             conn = open_connection()
             cur = conn.cursor()
+            token = str(token[7:-1])
             cur.execute("INSERT INTO blacklist(token) VALUES(%s)", (token,))
             close_connection(conn)
 

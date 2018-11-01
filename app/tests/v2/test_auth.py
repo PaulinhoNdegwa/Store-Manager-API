@@ -66,3 +66,34 @@ class AuthTestCase(BaseTest):
                                     data=json.dumps(login_details),
                                     headers=header_without_token)
         self.assertEqual(json.loads(response.data)["status"], 200)
+
+    @pytest.mark.timeout(30)
+    def test_signout(self):
+        """This method tests logout"""
+        access_token = self.authenticateAdmin()
+        res = self.client.put("/api/v2/auth/logout",
+                              headers={'Content-Type': 'application/json',
+                                       'Authorization': 'Bearer '+access_token})
+        self.assertEqual(json.loads(res.data)["status"], 200)
+
+    @pytest.mark.timeout(30)
+    def test_successful_signout(self):
+        """This method tests successful logout"""
+        access_token = self.authenticateAdmin()
+        self.client.put("/api/v2/auth/logout",
+                        headers={'Content-Type': 'application/json',
+                                 'Authorization': 'Bearer '+access_token})
+        res = self.client.post("/api/v2/auth/signup",
+                               data=json.dumps(signup_details),
+                               headers={'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer ' + access_token})
+        self.assertEqual(json.loads(res.data)["Status"], 401)
+
+    @pytest.mark.timeout(30)
+    def test_protected_without_token(self):
+        """This method tests access to protected route without a token"""
+        res = self.client.post("/api/v2/auth/signup",
+                               data=json.dumps(signup_details),
+                               headers={'Content-Type': 'application/json'})
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(json.loads(res.data)["msg"], "Missing Authorization Header")

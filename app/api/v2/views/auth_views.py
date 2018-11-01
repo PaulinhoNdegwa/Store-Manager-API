@@ -62,7 +62,7 @@ class Logout(Resource, User):
 
     @jwt_required
     @token_required
-    def delete(self):
+    def put(self):
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
 
