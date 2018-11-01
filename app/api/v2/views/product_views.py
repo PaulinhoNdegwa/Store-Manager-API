@@ -13,44 +13,46 @@ class Products(Resource, Product):
     def __init___(self):
         pass
 
-
     @jwt_required
     @atttendant_only
     def get(self):
         """GETs all products"""
         return jsonify({"Products": self.get_all_products(),
-                        "status":200})
-                        
+                        "status": 200})
+
     @jwt_required
     @admin_only
     @expects_json(product_schema)
     def post(self):
         """Saves a new product item"""
-        product_name = request.get_json("product_name")["product_name"].strip(" ")
-        model = request.get_json("model")["model"].strip(" ")
-        product_price = request.get_json("product_price")["product_price"]
-        quantity = request.get_json("quantity")["quantity"]
-        min_quantity = request.get_json("min_quantity")["min_quantity"]
+        data = request.get_json()
+        product_name = data["product_name"].strip(" ")
+        model = data["model"].strip(" ")
+        category = data["category"].strip(" ")
+        product_price = data["product_price"]
+        quantity = data["quantity"]
+        min_quantity = data["min_quantity"]
 
-        if not product_name or not model or not product_price or not quantity or not min_quantity:
+        if not product_name or not model or not product_price or not quantity \
+                or not min_quantity:
             return jsonify({
-                "message":"All fields are required",
+                "message": "All fields are required",
                 "status": 400
             })
 
         current_user = get_jwt_identity()["username"].lower()
-       
-        product= {
+
+        product = {
             "product_name": product_name,
             "model": model,
-            "product_price":product_price,
-            "quantity":quantity,
+            "category": category,
+            "product_price": product_price,
+            "quantity": quantity,
             "min_quantity": min_quantity,
             "created_by": current_user
         }
-        
+
         return self.save_product(**product)
-        
 
 
 class SingleProduct(Resource, Product):
@@ -63,7 +65,7 @@ class SingleProduct(Resource, Product):
     @token_required
     def get(self, product_id):
         """Gets a single product"""
-        		        
+
         return self.get_single_product(product_id)
 
     @jwt_required
@@ -72,39 +74,38 @@ class SingleProduct(Resource, Product):
     def put(self, product_id):
         """Endpoint to update a product"""
 
-        product_name = request.get_json("product_name")["product_name"].strip(" ")
+        product_name = request.get_json("product_name")[
+            "product_name"].strip(" ")
         model = request.get_json("model")["model"].strip(" ")
         product_price = request.get_json("product_price")["product_price"]
         quantity = request.get_json("quantity")["quantity"]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
-        if not product_name or not model or not product_price or not quantity or not min_quantity:
+        if not product_name or not model or not product_price or not quantity \
+                or not min_quantity:
             return jsonify({
-                "message":"Check all required fields",
+                "message": "Check all required fields",
                 "status": 400
             })
 
-
         current_user = get_jwt_identity()["username"].lower()
         print(current_user)
-        
-        product= {
+
+        product = {
             "product_id": product_id,
             "product_name": product_name,
             "model": model,
-            "product_price":product_price,
-            "quantity":quantity,
+            "product_price": product_price,
+            "quantity": quantity,
             "min_quantity": min_quantity,
             "created_by": current_user
         }
-        
-        
+
         return self.update_product(**product)
 
     @jwt_required
     @admin_only
     def delete(self, product_id):
         """End point to delete product"""
-        
+
         return self.delete_product(product_id)
-        

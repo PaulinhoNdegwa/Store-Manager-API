@@ -18,7 +18,6 @@ class TestingConfiguration(Config):
     TESTING = True
     DEBUG = True
     DATABASE_URL = os.getenv("DATABASE_URL_TEST")
-    # DATABASE_URL="user='postgres',password='1234', host='localhost', port='5432', dbname='test_db'"
 
 
 class StagingConfiguration(Config):
@@ -26,16 +25,17 @@ class StagingConfiguration(Config):
 
     DEBUG = True
 
+
 class ProductionConfiguration(Config):
     """"Configurations for production"""
 
-    DEBUG =  False
+    DEBUG = False
     TESTING = False
 
 
 app_config = {
-    "development" : DevelopmentConfiguration,
-    "testing" : TestingConfiguration,
-    "staging" : StagingConfiguration,
-    "production" : ProductionConfiguration
+    "development": DevelopmentConfiguration,
+    "testing": TestingConfiguration,
+    "staging": StagingConfiguration,
+    "production": ProductionConfiguration
 }

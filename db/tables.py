@@ -13,8 +13,7 @@ create_tables_queries = [
         id SERIAL PRIMARY KEY NOT NULL,
         cat_name VARCHAR NOT NULL,
         cat_desc VARCHAR NOT NULL
-    )"""
-    ,
+    )""",
     """CREATE TABLE IF NOT EXISTS products(
         product_id SERIAL PRIMARY KEY NOT NULL,
         product_name VARCHAR NOT NULL,
@@ -27,7 +26,8 @@ create_tables_queries = [
     )""",
     """CREATE TABLE IF NOT EXISTS sales(
         sale_id SERIAL PRIMARY KEY NOT NULL,
-        product_id INT NOT NULL references products(product_id) ON DELETE CASCADE,
+        product_id INT NOT NULL references products(product_id) ON DELETE\
+         RESTRICT,
         total_price INT NOT NULL,
         quantity INT NOT NULL,
         created_by VARCHAR NULL references users(username)
@@ -44,37 +44,40 @@ drop_tables_queries = [
     """DROP TABLE IF EXISTS sales CASCADE""",
     """DROP TABLE IF EXISTS blacklist CASCADE""",
     """DROP TABLE IF EXISTS categories CASCADE"""
-    
+
 ]
 
-admin_password = generate_password_hash("Qwerty1") 
+admin_password = generate_password_hash("Qwerty1")
 
 
 def create_tables():
     """Function to create new tables for test instance"""
     try:
         conn = open_connection()
-        cur  = conn.cursor() 
+        cur = conn.cursor()
 
         for q in create_tables_queries:
             cur.execute(q)
         cur.execute("SELECT * FROM users WHERE username = 'admin@gmail.com'")
         admin = cur.fetchone()
         if not admin:
-            cur.execute("INSERT INTO users (username, password, role) VALUES ('admin@gmail.com', %s, 'Admin')",(admin_password,))
+            cur.execute(
+                "INSERT INTO users (username, password, role) \
+                VALUES ('admin@gmail.com', %s, 'Admin')",
+                (admin_password,))
 
         close_connection(conn)
-    except  (Exception, psycopg2.DatabaseError) as error:
+    except (Exception, psycopg2.DatabaseError) as error:
         print("Error creating connect:", error)
+
 
 def drop_tables():
     """Function to drop all the tables after tests"""
-    
+
     conn = open_connection()
-    cur  = conn.cursor() 
+    cur = conn.cursor()
 
     for q in drop_tables_queries:
         cur.execute(q)
-    
-    
+
     close_connection(conn)

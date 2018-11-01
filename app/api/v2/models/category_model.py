@@ -3,6 +3,7 @@ from db.db_config import open_connection, close_connection
 from psycopg2 import Error
 import psycopg2
 
+
 class Category():
     """Creates category objects and methods"""
 
@@ -11,11 +12,13 @@ class Category():
 
     def save_category(self, cat_name, description):
         """Method to save a product"""
-        
+
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("INSERT INTO categories(cat_name, cat_desc) VALUES (%s, %s) RETURNING id, cat_name, cat_desc",(cat_name, description,))
+            cur.execute(
+                "INSERT INTO categories(cat_name, cat_desc) VALUES (%s, %s) \
+                RETURNING id, cat_name, cat_desc", (cat_name, description,))
             new_category = cur.fetchone()
             print(new_category)
             category = {
@@ -25,17 +28,16 @@ class Category():
             }
             close_connection(conn)
             return jsonify({
-                "message":"Category added successfully",
+                "message": "Category added successfully",
                 "category_added": category,
-                "status":200
+                "status": 200
             })
         except (Exception, psycopg2.DatabaseError) as error:
             print("Could not add category", error)
             return jsonify({
-                "message":"Category could not added",
-                "status":400
+                "message": "Category could not added",
+                "status": 400
             })
-
 
     def get_cat_by_id(self, cat_id):
         """Returns a category if it exists in the database"""
@@ -43,7 +45,22 @@ class Category():
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("SELECT * FROM categories WHERE id = %s",(cat_id,))
+            cur.execute("SELECT * FROM categories WHERE id = %s", (cat_id,))
+            category_exists = cur.fetchone()
+            close_connection(conn)
+
+            return category_exists
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Could not retrieve category", error)
+
+    def get_cat_by_name(self, cat_name):
+        """Returns a category if it exists in the database"""
+
+        try:
+            conn = open_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM categories WHERE cat_name = %s",
+                        (cat_name,))
             category_exists = cur.fetchone()
             close_connection(conn)
 
@@ -58,14 +75,16 @@ class Category():
 
         if not category_exists:
             return jsonify({
-                "message":"Category does not exist",
-                "status":404
+                "message": "Category does not exist",
+                "status": 404
             })
 
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("UPDATE categories SET cat_name = %s, cat_desc = %s WHERE id = %s RETURNING id, cat_name, cat_desc", (cat_name, cat_desc, cat_id,))
+            cur.execute("UPDATE categories SET cat_name = %s, cat_desc = %s\
+             WHERE id = %s RETURNING id, cat_name, cat_desc",
+                        (cat_name, cat_desc, cat_id,))
             new_category = cur.fetchone()
             print(new_category)
             category = {
@@ -75,15 +94,15 @@ class Category():
             }
             close_connection(conn)
             return jsonify({
-                "message":"Category added updated",
+                "message": "Category added updated",
                 "updated category": category,
-                "status":200
+                "status": 200
             })
         except (Exception, psycopg2.DatabaseError) as error:
             print("Product could not be updated", error)
             return jsonify({
-                "message":"Category could not updated",
-                "status":400
+                "message": "Category could not updated",
+                "status": 400
             })
 
     def delete_category(self, cat_id):
@@ -93,23 +112,22 @@ class Category():
 
         if not category_exists:
             return jsonify({
-                "message":"Category does not exist",
-                "status":404
+                "message": "Category does not exist",
+                "status": 404
             })
 
         try:
             conn = open_connection()
             cur = conn.cursor()
-            cur.execute("DELETE FROM categories WHERE id = %s",(cat_id,))
+            cur.execute("DELETE FROM categories WHERE id = %s", (cat_id,))
             close_connection(conn)
             return jsonify({
-                "message":"Category deleted",
-                "status":200
+                "message": "Category deleted",
+                "status": 200
             })
         except (Exception, psycopg2.DatabaseError) as error:
             print("Product could not be deleted", error)
             return jsonify({
-                "message":"Category could not deleted",
-                "status":400
+                "message": "Category could not deleted",
+                "status": 400
             })
-    

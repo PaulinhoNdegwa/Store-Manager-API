@@ -20,7 +20,7 @@ def open_connection():
     "Function to open connection"
     conn = connect_db()
     return conn
-    
+
 
 def close_connection(conn):
     """Closes connection after queries"""

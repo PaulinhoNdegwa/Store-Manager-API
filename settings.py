@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 
+
 def load_env_var():
     """Load dotenv variables"""
     APP_ROOT = os.path.join(os.path.dirname(__file__), "..")
