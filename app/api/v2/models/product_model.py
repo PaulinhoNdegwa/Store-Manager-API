@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 from db.db_config import open_connection, close_connection
+from app.api.v2.models.category_model import Category
 
 
 class Product():
@@ -22,9 +23,15 @@ class Product():
 
         return product_exist
 
-    def save_product(self, product_name, model, product_price, quantity,
-                     min_quantity, created_by):
+    def save_product(self, product_name, model, category, product_price,
+                     quantity, min_quantity, created_by):
         """Method to create and save a product dict object"""
+        category_available = Category().get_cat_by_name(category)
+
+        if not category_available:
+            category_id = None
+        else:
+            category_id = category_available[0]
 
         conn = open_connection()
         cur = conn.cursor()
@@ -37,11 +44,11 @@ class Product():
                             "status": 409})
 
         cur.execute("""INSERT INTO products(product_name, product_model, \
-                unit_price, quantity, min_quantity, created_by)\
-                 VALUES(%s, %s, %s, %s, %s, %s) RETURNING product_id, \
+                cat_id, unit_price, quantity, min_quantity, created_by)\
+                 VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING product_id, \
                  product_name, product_model, unit_price, quantity,\
                   min_quantity, created_by""",
-                    (product_name, model, product_price, quantity,
+                    (product_name, model, category_id, product_price, quantity,
                      min_quantity, created_by,))
         new_product = cur.fetchone()
         product = {

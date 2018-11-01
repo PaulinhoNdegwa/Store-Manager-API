@@ -25,12 +25,13 @@ class Products(Resource, Product):
     @expects_json(product_schema)
     def post(self):
         """Saves a new product item"""
-        product_name = request.get_json("product_name")[
-            "product_name"].strip(" ")
-        model = request.get_json("model")["model"].strip(" ")
-        product_price = request.get_json("product_price")["product_price"]
-        quantity = request.get_json("quantity")["quantity"]
-        min_quantity = request.get_json("min_quantity")["min_quantity"]
+        data = request.get_json()
+        product_name = data["product_name"].strip(" ")
+        model = data["model"].strip(" ")
+        category = data["category"].strip(" ")
+        product_price = data["product_price"]
+        quantity = data["quantity"]
+        min_quantity = data["min_quantity"]
 
         if not product_name or not model or not product_price or not quantity \
                 or not min_quantity:
@@ -44,6 +45,7 @@ class Products(Resource, Product):
         product = {
             "product_name": product_name,
             "model": model,
+            "category": category,
             "product_price": product_price,
             "quantity": quantity,
             "min_quantity": min_quantity,

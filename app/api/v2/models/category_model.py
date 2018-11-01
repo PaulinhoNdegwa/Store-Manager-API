@@ -53,6 +53,21 @@ class Category():
         except (Exception, psycopg2.DatabaseError) as error:
             print("Could not retrieve category", error)
 
+    def get_cat_by_name(self, cat_name):
+        """Returns a category if it exists in the database"""
+
+        try:
+            conn = open_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM categories WHERE cat_name = %s",
+                        (cat_name,))
+            category_exists = cur.fetchone()
+            close_connection(conn)
+
+            return category_exists
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Could not retrieve category", error)
+
     def update_category(self, cat_id, cat_name, cat_desc):
         """Deletes a category record"""
 
