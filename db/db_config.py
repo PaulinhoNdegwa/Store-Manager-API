@@ -10,7 +10,8 @@ def connect_db():
     print(config)
     if config != "testing" or config != "development":
         database_url = os.environ['DATABASE_URL'], sslmode = 'require'
-    database_url = app_config[config].DATABASE_URL
+    else:
+        database_url = app_config[config].DATABASE_URL
 
     try:
         return psycopg2.connect(database_url)
