@@ -10,12 +10,12 @@ services:
   postgresql
 
 before_script:
-#  - export APP_SETTINGS=testing
+ - export APP_SETTINGS=testing
  - psql -c 'create database test_db;' -U postgres
  - psql -c "ALTER USER postgres WITH PASSWORD '1234';" -U postgres 
 env: 
  - DATABASE_URL_TEST="dbname='test_db' user='postgres' host='localhost' password='1234'"
- - APP_SETTINGS=testing
+
 script:
  - pytest --cov-report term-missing --cov=app
   

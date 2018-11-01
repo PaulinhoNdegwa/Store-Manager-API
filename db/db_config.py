@@ -8,7 +8,7 @@ def connect_db():
     """"Establishses connection with DB"""
     config = os.getenv("APP_SETTINGS")
     print(config)
-    if config != "testing" or config != "development":
+    if config != "testing" and config != "development":
         database_url = os.environ['DATABASE_URL'], sslmode = 'require'
     else:
         database_url = app_config[config].DATABASE_URL
