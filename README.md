@@ -1,22 +1,58 @@
 [![Build Status](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API.svg?branch=develop)](https://travis-ci.com/PaulinhoNdegwa/Store-Manager-API)
 [![Coverage Status](https://coveralls.io/repos/github/PaulinhoNdegwa/Store-Manager-API/badge.svg?branch=develop)](https://coveralls.io/github/PaulinhoNdegwa/Store-Manager-API?branch=develop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/613b98b77564d6e19702/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/8cfedb70e884468b7496/maintainability)](https://codeclimate.com/github/PaulinhoNdegwa/Store-Manager-API/maintainability)
 
 # Store-Manager-API
 
-This project involves building API endpoints for a Store Manager app. The following endpoints are the minimun required
+This project involves building a Store Manager app that is a RESTful API that will help a store owner and store attendants manage their store
 
-EndPoint	Functionality	Notes
+### Features Included:
 
-GET /products	Fetch all products	Get all available products.
+1. Store admin can create other app users
+2. Store owner/admin can signin/signout
+3. Store admin can create, update and delete products
+4. Store attendant can add sales
+5. Store owner/attendant can view single users
+6. Store attendant can view all sales
+7. Store owner can view all users
 
-GET /products/<productId>	Fetch a single product record	Get a specific product using the product’s id.
-  
-GET /sales	Fetch all sale records	Get all sale records. This endpoint should be accessible to only the store owner/admin.
+### Installing
 
-GET /sales/<saleId>	Fetch a single sale record	Get a specific sale record using the sale record Id. This endpoint should be accessible to only the store owner/admin and the creator (store attendant) of the specific sale record.
-  
-POST /products	Create a product	Create a new product record. This endpoint should be accessible to only the store owner/admin.
+Clone the repository [```here```](https://github.com/PaulinhoNdegwa/Store-Manager-API) or 
 
-POST /sales	Create a sale order	Create a sale record. This endpoint is accessible to only the store attendant.
+```$ git clone https://github.com/PaulinhoNdegwa/Store-Manager-API.git ```
+
+cd into Store-Manager-API
+
+Create a virtual environment
+
+```$ virtualenv venv -p python3 ```
+
+Activate Virtual Environment
+
+```$ source venv/bin/activate ```
+
+Install project dependencies 
+
+
+```$ pip install -r requirements.txt```
+
+#### Running the application
+
+```$ python run.py ```
+
+
+
+#### Testing
+
+```$  pytest --cov=app ```
+
+
+## Authors
+
+* **Paul Gichuki** - *Initial work* - [PaulinhoNdegwa](https://github.com/PaulinhoNdegwa)
+
+
+## Acknowledgments
+
+* Thanks to everyone who helped in the development of this project
