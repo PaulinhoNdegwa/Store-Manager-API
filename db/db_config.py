@@ -9,7 +9,7 @@ def connect_db():
     config = os.getenv("APP_SETTINGS")
     print(config)
     if config != "testing" and config != "development":
-        database_url = os.environ['DATABASE_URL'], sslmode = 'require'
+        database_url = "postgres://brtaaikaaglcck:b456c778bf66cd3d1e93bebdbcb0d838b501c4ae995d75e745459a4e36f5aa90@ec2-107-21-93-132.compute-1.amazonaws.com:5432/dd5gg557q2fle4"
     else:
         database_url = app_config[config].DATABASE_URL
 
