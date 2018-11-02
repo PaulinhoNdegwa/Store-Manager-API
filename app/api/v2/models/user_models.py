@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 import re
+import datetime
 from psycopg2 import Error
 import psycopg2
 from db.db_config import open_connection, close_connection
@@ -134,7 +135,8 @@ class User():
             "username": email,
             "role": role
         }
-        access_token = create_access_token(identity=user_identity)
+        access_token = create_access_token(identity=user_identity,
+                            expires_delta=datetime.timedelta(hours=3))
         token_available = self.lookup_token(access_token)
         if token_available:
             return jsonify({

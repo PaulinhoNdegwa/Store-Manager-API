@@ -8,13 +8,6 @@ def resource_not_found(error):
                     "status": 404})
 
 
-def internal_server_error(error):
-    """This function handles all server errors"""
-
-    return jsonify({"message": "Server error",
-                    "status": 500})
-
-
 def method_not_allowed(error):
     """This functions catches all invalid methods in resources"""
 
