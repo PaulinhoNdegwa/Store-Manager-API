@@ -32,9 +32,13 @@ def create_app(config_name):
 
     # Add app error handlers
     storemanager.register_error_handler(404, resource_not_found)
-    storemanager.register_error_handler(500, internal_server_error)
     storemanager.register_error_handler(405, method_not_allowed)
     storemanager.register_error_handler(401, missing_auth_header)
+
+    @storemanager.errorhandler(Exception)
+    def unhandled_exception(e):
+        return jsonify({"message": "Server error. Contact the admin",
+                        "status": 500})
 
     @jwt.user_claims_loader
     def add_claim_to_access_token(user_identity):

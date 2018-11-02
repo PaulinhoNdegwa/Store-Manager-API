@@ -109,6 +109,7 @@ class Product():
                 "product_id": product[0],
                 "product_name": product[1],
                 "product_model": product[2],
+                "Category": product[3],
                 "unit": product[4],
                 "quantity": product[5],
                 "min quantity": product[6]
@@ -131,6 +132,7 @@ class Product():
             "product_id": product_exist[0],
             "product_name": product_exist[1],
             "product_model": product_exist[2],
+            "Category": product_exist[3],
             "unit": product_exist[4],
             "quantity": product_exist[5],
             "min quantity": product_exist[6]
