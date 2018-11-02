@@ -7,11 +7,15 @@ import psycopg2
 class Category():
     """Creates category objects and methods"""
 
-    def __init__(self):
-        pass
-
     def save_category(self, cat_name, description):
         """Method to save a product"""
+
+        cat_exists = self.get_cat_by_name(cat_name)
+        if cat_exists:
+            return jsonify({
+                "message": "Category already exists",
+                "status": 400
+            })
 
         try:
             conn = open_connection()
@@ -20,7 +24,6 @@ class Category():
                 "INSERT INTO categories(cat_name, cat_desc) VALUES (%s, %s) \
                 RETURNING id, cat_name, cat_desc", (cat_name, description,))
             new_category = cur.fetchone()
-            print(new_category)
             category = {
                 "category_id": new_category[0],
                 "category_name": new_category[1],
@@ -94,7 +97,7 @@ class Category():
             }
             close_connection(conn)
             return jsonify({
-                "message": "Category added updated",
+                "message": "Category updated",
                 "updated category": category,
                 "status": 200
             })

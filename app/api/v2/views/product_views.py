@@ -6,12 +6,11 @@ from ..utils.decorators import admin_only, atttendant_only, token_required
 from flask_expects_json import expects_json
 from ..utils.json_schemas import product_schema
 
+product = Product()
+
 
 class Products(Resource, Product):
     """This class provides access to operations to GET and POST on products"""
-
-    def __init___(self):
-        pass
 
     @jwt_required
     @atttendant_only
@@ -52,7 +51,7 @@ class Products(Resource, Product):
             "created_by": current_user
         }
 
-        return self.save_product(**product)
+        return Product().save_product(**product)
 
 
 class SingleProduct(Resource, Product):
@@ -66,7 +65,7 @@ class SingleProduct(Resource, Product):
     def get(self, product_id):
         """Gets a single product"""
 
-        return self.get_single_product(product_id)
+        return product.get_single_product(product_id)
 
     @jwt_required
     @admin_only
@@ -89,7 +88,6 @@ class SingleProduct(Resource, Product):
             })
 
         current_user = get_jwt_identity()["username"].lower()
-        print(current_user)
 
         product = {
             "product_id": product_id,
@@ -101,11 +99,11 @@ class SingleProduct(Resource, Product):
             "created_by": current_user
         }
 
-        return self.update_product(**product)
+        return Product().update_product(**product)
 
     @jwt_required
     @admin_only
     def delete(self, product_id):
         """End point to delete product"""
 
-        return self.delete_product(product_id)
+        return product.delete_product(product_id)

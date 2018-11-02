@@ -9,13 +9,11 @@ from ..utils.decorators import admin_only, token_required
 from flask_expects_json import expects_json
 from ..utils.json_schemas import category_schema
 
+category = Category()
 
-class Categories(Resource, Category):
+
+class Categories(Resource):
     """Creates the endpoint for categories"""
-
-    def __init__(self):
-        """Initializes a category object"""
-        self.category = Category()
 
     @jwt_required
     @admin_only
@@ -31,15 +29,11 @@ class Categories(Resource, Category):
                 "status": 400
             })
 
-        return self.category.save_category(cat_name, description)
+        return category.save_category(cat_name, description)
 
 
-class SingleCategory(Resource, Category):
+class SingleCategory(Resource):
     """Creates an endpoint for specific products"""
-
-    def __init__(self):
-        """Initializes a category object"""
-        self.category = Category()
 
     @jwt_required
     @admin_only
@@ -55,11 +49,11 @@ class SingleCategory(Resource, Category):
                 "status": 400
             })
 
-        return self.category.update_category(cat_id, cat_name, cat_desc)
+        return category.update_category(cat_id, cat_name, cat_desc)
 
     @jwt_required
     @admin_only
     def delete(self, cat_id):
         """Endpoint to delete a category"""
 
-        return self.category.delete_category(cat_id)
+        return category.delete_category(cat_id)

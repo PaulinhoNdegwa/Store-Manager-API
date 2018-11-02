@@ -8,11 +8,6 @@ class Product():
     """This class initialized a sales object.
     Also it has a save method that saves the sale in a list"""
 
-    def __init__(self):
-        """Method to initialize Product list"""
-
-        pass
-
     def get_product_by_id(self, product_id):
         """Fetches a product by product ID"""
         conn = open_connection()
@@ -161,5 +156,5 @@ class Product():
                             "status": 404})
         cur.execute("DELETE FROM products WHERE product_id=%s", (product_id,))
         close_connection(conn)
-        return jsonify({"message": "Product sucessfully deleted",
+        return jsonify({"message": "Product successfully deleted",
                         "status": 200})

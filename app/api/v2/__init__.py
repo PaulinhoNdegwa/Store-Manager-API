@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
 from .views.product_views import Products, SingleProduct
-from .views.sales_views import Sales, SingleSale
+from .views.sales_views import Sales, SingleSale, Profile
 from .views.users_views import Users, SingleUser
 from .views.auth_views import Register, Login, Logout
 from .views.cat_views import Categories, SingleCategory
@@ -18,6 +18,7 @@ api_v2.add_resource(Sales, "/sales")
 api_v2.add_resource(Users, "/users")
 api_v2.add_resource(SingleProduct, "/products/<int:product_id>")
 api_v2.add_resource(SingleSale, "/sales/<int:sale_id>")
+api_v2.add_resource(Profile, "/profile")
 api_v2.add_resource(SingleUser, "/users/<int:user_id>")
 
 api_v2.add_resource(Categories, "/category")

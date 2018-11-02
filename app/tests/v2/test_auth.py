@@ -21,6 +21,8 @@ class AuthTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
+        self.assertEqual(json.loads(response.data)["Message"],
+                         "User saved")
 
     @pytest.mark.timeout(30)
     def test_signup_with_invalid_email(self):
@@ -35,9 +37,11 @@ class AuthTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 400)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Please use a valid email format")
 
     @pytest.mark.timeout(30)
-    def test_login_with_invalid_password(self):
+    def test_login_with_invalid_password_format(self):
         """Function to test login with invalid password"""
         user = {
             "email": "paul@email.com",
@@ -54,6 +58,8 @@ class AuthTestCase(BaseTest):
                                     data=json.dumps(user),
                                     headers=header_without_token)
         self.assertEqual(json.loads(response.data)["status"], 400)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Please use a valid password format")
 
     @pytest.mark.timeout(30)
     def test_successful_login(self):
@@ -66,6 +72,8 @@ class AuthTestCase(BaseTest):
                                     data=json.dumps(login_details),
                                     headers=header_without_token)
         self.assertEqual(json.loads(response.data)["status"], 200)
+        self.assertEqual(json.loads(response.data)["message"],
+                         "Successfully logged in")
 
     @pytest.mark.timeout(30)
     def test_signout(self):
@@ -75,9 +83,11 @@ class AuthTestCase(BaseTest):
                               headers={'Content-Type': 'application/json',
                                        'Authorization': 'Bearer '+access_token})
         self.assertEqual(json.loads(res.data)["status"], 200)
+        self.assertEqual(json.loads(res.data)["message"],
+                         "Successfully logged out")
 
     @pytest.mark.timeout(30)
-    def test_successful_signout(self):
+    def test_after_successful_signout(self):
         """This method tests successful logout"""
         access_token = self.authenticateAdmin()
         self.client.put("/api/v2/auth/logout",
@@ -88,6 +98,8 @@ class AuthTestCase(BaseTest):
                                headers={'Content-Type': 'application/json',
                                         'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(res.data)["Status"], 401)
+        self.assertEqual(json.loads(res.data)["Message"],
+                         "Unsuccessful, token is invalid. Log in again")
 
     @pytest.mark.timeout(30)
     def test_protected_without_token(self):
@@ -96,4 +108,5 @@ class AuthTestCase(BaseTest):
                                data=json.dumps(signup_details),
                                headers={'Content-Type': 'application/json'})
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(json.loads(res.data)["msg"], "Missing Authorization Header")
+        self.assertEqual(json.loads(res.data)[
+                         "msg"], "Missing Authorization Header")
