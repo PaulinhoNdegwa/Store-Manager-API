@@ -13,7 +13,7 @@ class Products(Resource, Product):
     """This class provides access to operations to GET and POST on products"""
 
     @jwt_required
-    @atttendant_only
+    @token_required
     def get(self):
         """GETs all products"""
         return jsonify({"Products": self.get_all_products(),

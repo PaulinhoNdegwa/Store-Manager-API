@@ -43,7 +43,7 @@ class SingleUser(Resource):
             "Role": user_exists[3]
         }
         return jsonify({
-            "Message": "Successful",
+            "message": "Successful",
             "User": user,
             "status": 200
         })
@@ -61,3 +61,10 @@ class SingleUser(Resource):
                             "status": 404})
 
         return user.update_role(user_id, role)
+
+    @jwt_required
+    @admin_only
+    def delete(self, user_id):
+        """End point to delete product"""
+
+        return user.delete_user(user_id)

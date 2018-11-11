@@ -21,7 +21,7 @@ class AuthTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
-        self.assertEqual(json.loads(response.data)["Message"],
+        self.assertEqual(json.loads(response.data)["message"],
                          "User saved")
 
     @pytest.mark.timeout(30)
@@ -98,7 +98,7 @@ class AuthTestCase(BaseTest):
                                headers={'Content-Type': 'application/json',
                                         'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(res.data)["Status"], 401)
-        self.assertEqual(json.loads(res.data)["Message"],
+        self.assertEqual(json.loads(res.data)["message"],
                          "Unsuccessful, token is invalid. Log in again")
 
     @pytest.mark.timeout(30)

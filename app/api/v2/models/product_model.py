@@ -48,7 +48,7 @@ class Product():
         new_product = cur.fetchone()
         product = {
             "Product Id": new_product[0],
-            "Product  Name": new_product[1],
+            "Product Name": new_product[1],
             "Product Model": new_product[2],
             "Unit Price": new_product[3],
             "Quantity": new_product[4],
@@ -56,7 +56,7 @@ class Product():
             "Created By": new_product[6]
         }
         close_connection(conn)
-        return jsonify({"Message": "Successfully saved",
+        return jsonify({"message": "Successfully saved",
                         "Product id saved": product,
                         "status": 201})
 
@@ -109,10 +109,10 @@ class Product():
                 "product_id": product[0],
                 "product_name": product[1],
                 "product_model": product[2],
-                "Category": product[3],
-                "unit": product[4],
+                "category": product[3],
+                "unit_price": product[4],
                 "quantity": product[5],
-                "min quantity": product[6]
+                "min_quantity": product[6]
             }
             product_list.append(product_dict)
 

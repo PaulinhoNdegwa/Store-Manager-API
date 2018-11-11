@@ -17,7 +17,7 @@ class ProductTestCase(BaseTest):
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
-        self.assertEqual(json.loads(response.data)["Message"],
+        self.assertEqual(json.loads(response.data)["message"],
                          "Successfully saved")
 
     @pytest.mark.timeout(30)

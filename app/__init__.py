@@ -6,6 +6,7 @@ from settings import load_env_var
 from db import tables
 from flask_jwt_extended import JWTManager
 from app.api.v2.utils.error_handlers import *
+from flask_cors import CORS
 
 
 def create_app(config_name):
@@ -14,6 +15,7 @@ def create_app(config_name):
     storemanager = Flask(__name__, instance_relative_config=True)
     storemanager.config["JWT_SECRET_KEY"] = "mysecretkey"
     jwt = JWTManager(storemanager)
+    CORS(storemanager)
 
     storemanager.url_map.strict_slashes = False
     storemanager.config.from_object(app_config[config_name])

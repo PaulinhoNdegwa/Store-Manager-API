@@ -91,7 +91,7 @@ class User():
                 }
                 close_connection(conn)
                 return jsonify({
-                    "Message": "User saved",
+                    "message": "User saved",
                     "User": new_user,
                     "status": 201
                 })
@@ -124,6 +124,7 @@ class User():
 
         role = user_exists[3]
         db_password = user_exists[2]
+        role = user_exists[3].lower()
         password_correct = check_password_hash(db_password, password)
         if not password_correct:
             return jsonify({
@@ -136,7 +137,7 @@ class User():
             "role": role
         }
         access_token = create_access_token(identity=user_identity,
-                            expires_delta=datetime.timedelta(hours=3))
+                                           expires_delta=datetime.timedelta(hours=3))
         token_available = self.lookup_token(access_token)
         if token_available:
             return jsonify({
@@ -146,7 +147,8 @@ class User():
         return jsonify({
             "message": "Successfully logged in",
             "token": access_token,
-            "status": 200
+            "status": 200,
+            "role": role
         })
 
     def get_all_users(self):
@@ -296,3 +298,21 @@ class User():
             return product_sales
         except Exception as e:
             print(e)
+
+    def delete_user(self, user_id):
+        """Method to delete product"""
+
+        if not user_id or not isinstance(user_id, int):
+            return jsonify({"message": "Please provide a valid user id",
+                            "status": 404})
+        user_exist = self.get_user_by_id(user_id)
+
+        if not user_exist:
+            return jsonify({"message": "User does not exist",
+                            "status": 404})
+        conn = open_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM users WHERE user_id=%s", (user_id,))
+        close_connection(conn)
+        return jsonify({"message": "User successfully deleted",
+                        "status": 200})

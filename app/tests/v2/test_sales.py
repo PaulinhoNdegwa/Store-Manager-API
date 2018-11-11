@@ -12,7 +12,10 @@ class SalesTestCase(BaseTest):
         self.client.post("/api/v2/products", data=json.dumps(product),
                          headers={'Content-Type': 'application/json',
                                   'Authorization': 'Bearer ' + access_token_2})
-        response = self.client.post("/api/v2/sales", data=json.dumps(sale),
+        self.client.post("/api/v2/sales", data=json.dumps(sale),
+                         headers={'Content-Type': 'application/json',
+                                  'Authorization': 'Bearer ' + access_token})
+        response = self.client.post("/api/v2/cart", 
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 201)
@@ -29,6 +32,9 @@ class SalesTestCase(BaseTest):
         self.client.post("/api/v2/sales", data=json.dumps(sale),
                          headers={'Content-Type': 'application/json',
                                   'Authorization': 'Bearer ' + access_token})
+        self.client.post("/api/v2/cart",
+                                    headers={'Content-Type': 'application/json',
+                                             'Authorization': 'Bearer ' + access_token})
         response = self.client.get("/api/v2/sales",
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token_2})
@@ -53,7 +59,10 @@ class SalesTestCase(BaseTest):
         self.client.post("/api/v2/products", data=json.dumps(product),
                          headers={'Content-Type': 'application/json',
                                   'Authorization': 'Bearer ' + access_token_2})
-        response = self.client.post("/api/v2/sales", data=json.dumps(sale),
+        self.client.post("/api/v2/sales", data=json.dumps(sale),
+                                    headers={'Content-Type': 'application/json',
+                                             'Authorization': 'Bearer ' + access_token})
+        self.client.post("/api/v2/cart",
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
         response = self.client.get("/api/v2/sales/1",
