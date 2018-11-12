@@ -37,7 +37,7 @@ class CategoryTestCase(BaseTest):
         response = self.client.post("/api/v2/category", data=json.dumps(new_category),
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
-        self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["status"], 403)
         self.assertEqual(json.loads(response.data)["message"],
                          "Unauthorized! You are not an admin")
 
@@ -61,7 +61,7 @@ class CategoryTestCase(BaseTest):
         response = self.client.delete("/api/v2/category/1",
                                       headers={'Content-Type': 'application/json',
                                                'Authorization': 'Bearer ' + access_token})
-        self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["status"], 403)
         self.assertEqual(json.loads(response.data)["message"],
                          "Unauthorized! You are not an admin")
 

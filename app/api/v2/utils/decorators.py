@@ -15,14 +15,14 @@ def token_required(f):
             token = str(request.headers["Authorization"][7:-1])
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in",
+                "message": "Unsuccessful, token is required. Log in",
                 "Status": 401
             })
         user_object = User()
         token_blacklisted = user_object.lookup_token(token)
         if token_blacklisted:
             return ({
-                "Message": "Unsuccessful, token is invalid. Log in again",
+                "message": "Unsuccessful, token is invalid. Log in again",
                 "Status": 401
             })
         return f(*args, **kwargs)
@@ -40,23 +40,22 @@ def admin_only(f):
             token = str(request.headers["Authorization"][7:-1])
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in",
+                "message": "Unsuccessful, token is required. Log in",
                 "Status": 401
             })
         user_object = User()
         token_blacklisted = user_object.lookup_token(token)
         if token_blacklisted is True:
             return ({
-                "Message": "Unsuccessful, token is invalid. Log in again",
+                "message": "Unsuccessful, token is invalid. Log in again",
                 "Status": 401
             })
 
         role_claim = get_jwt_claims()["role"].lower()
         if role_claim != "admin":
-            print("not admin")
             return jsonify({
                 "message": "Unauthorized! You are not an admin",
-                "status": 401
+                "status": 403
             })
         return f(*args, **kwargs)
     return decorated
@@ -73,23 +72,21 @@ def atttendant_only(f):
             token = str(request.headers["Authorization"][7:-1])
         if not token:
             return ({
-                "Message": "Unsuccessful, token is required. Log in",
-                "Status": 401
+                "message": "Unsuccessful, token is required. Log in",
+                "status": 401
             })
         user_object = User()
         token_blacklisted = user_object.lookup_token(token)
         if token_blacklisted is True:
             return ({
-                "Message": "Unsuccessful, token is invalid. Log in again",
-                "Status": 401
+                "message": "Unsuccessful, token is invalid. Log in again",
+                "mtatus": 401
             })
         role_claim = get_jwt_claims()["role"].lower()
-        print(role_claim)
         if role_claim != "attendant":
-            print("not attendant")
             return jsonify({
                 "message": "Unauthorized! You are not an attendant",
-                "status": 401
+                "status": 403
             })
         return f(*args, **kwargs)
     return decorated

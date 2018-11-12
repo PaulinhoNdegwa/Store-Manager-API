@@ -39,8 +39,8 @@ class Sales(Resource):
 
         current_user = get_jwt_identity()["username"]
 
-        return sale.save_sale(product_name, product_model,
-                              quantity, current_user)
+        return sale.add_to_cart(product_name, product_model,
+                                quantity, current_user)
 
 
 class SingleSale(Resource):
@@ -78,17 +78,50 @@ class Profile(Resource):
         for product_sale in product_sales:
 
             sale = {
-                "Product Id": product_sale[0],
-                "Product Name": product_sale[1],
-                "Product Model": product_sale[2],
-                "Quantity sold": product_sale[3],
-                "Total Price": product_sale[4]
+                "Product_Id": product_sale[0],
+                "Product_Name": product_sale[1],
+                "Product_Model": product_sale[2],
+                "Quantity_sold": product_sale[3],
+                "Total_Price": product_sale[4]
             }
             sales_list.append(sale)
 
         return jsonify({
-            "Message": "Successful",
+            "message": "Successful",
             "Profile": profile,
             "Sales": sales_list,
             "status": 200
         })
+
+
+class Cart(Resource):
+    """This resource allows the manipulation of a cart"""
+
+    @jwt_required
+    @atttendant_only
+    def get(self):
+        """This method returns cart items added by a specific user"""
+        current_user = get_jwt_identity()["username"]
+
+        return jsonify({"Username": current_user,
+                        "message": "Successful",
+                        "Cart": sale.get_all_cart_items(current_user)})
+
+    @jwt_required
+    @atttendant_only
+    def post(self):
+        """This method checks out a users cart"""
+        current_user = get_jwt_identity()["username"]
+
+        return sale.checkout_cart(current_user)
+
+
+class CartItem(Resource):
+
+    @jwt_required
+    @atttendant_only
+    def delete(self, cart_id):
+        """This method checks out a users cart"""
+        # current_user = get_jwt_identity()["username"]
+
+        return sale.remove_from_cart(cart_id)

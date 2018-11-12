@@ -27,7 +27,7 @@ class Register(Resource):
 
         if not email or not password or not confirm_password or not role:
             return jsonify({
-                "message": "Email, password and confirm password are required",
+                "message": "All fields are required",
                 "status": 400
             })
 

@@ -23,7 +23,7 @@ class UsersTestCase(BaseTest):
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
         self.assertEqual(json.loads(response.data)["status"], 200)
-        self.assertEqual(json.loads(response.data)["Message"],
+        self.assertEqual(json.loads(response.data)["message"],
                          "Successful")
 
     def test_get_inexistent_user(self):
@@ -44,7 +44,7 @@ class UsersTestCase(BaseTest):
         response = self.client.get("/api/v2/users",
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
-        self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["status"], 403)
         self.assertEqual(json.loads(response.data)["message"],
                          "Unauthorized! You are not an admin")
 
@@ -80,6 +80,6 @@ class UsersTestCase(BaseTest):
                                    data=json.dumps(new_role),
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
-        self.assertEqual(json.loads(response.data)["status"], 401)
+        self.assertEqual(json.loads(response.data)["status"], 403)
         self.assertEqual(json.loads(response.data)["message"],
                          "Unauthorized! You are not an admin")

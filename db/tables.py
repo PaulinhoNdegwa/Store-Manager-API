@@ -35,6 +35,15 @@ create_tables_queries = [
     """CREATE TABLE IF NOT EXISTS blacklist(
         id SERIAL PRIMARY KEY NOT NULL,
         token VARCHAR NOT NULL
+    )""",
+    """CREATE TABLE IF NOT EXISTS carts(
+        cart_id SERIAL PRIMARY KEY NOT NULL,
+        product_id INT NOT NULL references products(product_id) ON DELETE\
+         RESTRICT,
+        total_price INT NOT NULL,
+        quantity INT NOT NULL,
+        new_quantity INT NOT NULL,
+        created_by VARCHAR NULL references users(username)
     )"""
 ]
 
@@ -43,7 +52,8 @@ drop_tables_queries = [
     """DROP TABLE IF EXISTS products CASCADE""",
     """DROP TABLE IF EXISTS sales CASCADE""",
     """DROP TABLE IF EXISTS blacklist CASCADE""",
-    """DROP TABLE IF EXISTS categories CASCADE"""
+    """DROP TABLE IF EXISTS categories CASCADE""",
+    """DROP TABLE IF EXISTS cart CASCADE"""
 
 ]
 
