@@ -128,8 +128,9 @@ class Sale():
         cart_list = self.get_all_cart_items(created_by)
 
         return jsonify({
-            "message": "Added to cart",
-            "Cart": cart_list
+            "message": "Added {} item(s) of product id {} to cart".format(quantity, product_id),
+            "Cart": cart_list,
+            "status": 200
         })
 
     def get_all_cart_items(self, current_user):

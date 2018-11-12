@@ -65,12 +65,14 @@ class Product():
         """This method allows an admin to update the products details"""
 
         product_exist = self.get_product_by_id(product_id)
-
+        print(product_exist)
         if not product_exist:
             return jsonify({"message": "Product does not exist",
                             "status": 404})
-
+        quantity = int(quantity)
+        min_quantity = int(min_quantity)
         new_quantity = product_exist[5] + quantity
+
         conn = open_connection()
         cur = conn.cursor()
         cur.execute("""UPDATE products set product_name=%s, product_model=%s, \
