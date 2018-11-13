@@ -14,6 +14,13 @@ category = Category()
 
 class Categories(Resource):
     """Creates the endpoint for categories"""
+    @jwt_required
+    @admin_only
+    def get(self):
+        """Endpoint to get all categories"""
+
+        return category.get_all_categories()
+        
 
     @jwt_required
     @admin_only
@@ -40,8 +47,8 @@ class SingleCategory(Resource):
     @expects_json(category_schema)
     def put(self, cat_id):
         """Endpoint to delete a category"""
-        cat_name = request.get_json("cat_name")["cat_name"].strip()
-        cat_desc = request.get_json("desc")["desc"]
+        cat_name = request.get_json("cat_name")["cat_name"].strip(" ")
+        cat_desc = request.get_json("desc")["desc"].strip(" ")
 
         if not cat_name or not cat_desc:
             return jsonify({

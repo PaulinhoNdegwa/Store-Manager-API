@@ -40,10 +40,14 @@ invalid_email = {
 }
 
 # ###################PRODUCT TEST DATA#######################
+category = {
+    "cat_name": "Laptops",
+    "desc": "Latest laptops"
+}
 product = {
     "product_name": "macbook",
     "model": "g3",
-    "category": "Laptop",
+    "category": "Laptops",
     "product_price": 1200,
     "quantity": 29,
     "min_quantity": 10
@@ -52,7 +56,7 @@ product = {
 product_update = {
     "product_name": "macbook",
     "model": "g4",
-    "category": "Laptop",
+    "category": "Laptops",
     "product_price": 1200,
     "quantity": 27,
     "min_quantity": 10
@@ -60,7 +64,7 @@ product_update = {
 empty_product_details = {
     "product_name": " ",
     "model": " ",
-    "category": "Laptop",
+    "category": "Laptops",
     "product_price": 1200,
     "quantity": 13,
     "min_quantity": 10

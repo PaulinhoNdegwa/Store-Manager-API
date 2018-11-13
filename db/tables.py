@@ -11,26 +11,29 @@ create_tables_queries = [
     )""",
     """CREATE TABLE IF NOT EXISTS categories(
         id SERIAL PRIMARY KEY NOT NULL,
-        cat_name VARCHAR NOT NULL,
+        cat_name VARCHAR NOT NULL UNIQUE,
         cat_desc VARCHAR NOT NULL
     )""",
     """CREATE TABLE IF NOT EXISTS products(
         product_id SERIAL PRIMARY KEY NOT NULL,
         product_name VARCHAR NOT NULL,
         product_model VARCHAR NOT NULL,
-        cat_id INT NULL references categories(id),
+        cat_id VARCHAR NULL references categories(cat_name) ON DELETE\
+         SET NULL ON UPDATE CASCADE,
         unit_price INT NOT NULL,
         quantity INT NOT NULL,
         min_quantity INT NOT NULL,
-        created_by VARCHAR references users(username)
+        created_by VARCHAR references users(username) ON DELETE\
+         SET NULL ON UPDATE CASCADE
     )""",
     """CREATE TABLE IF NOT EXISTS sales(
         sale_id SERIAL PRIMARY KEY NOT NULL,
-        product_id INT NOT NULL references products(product_id) ON DELETE\
-         RESTRICT,
+        product_id INT NULL references products(product_id) ON DELETE\
+         SET NULL ON UPDATE CASCADE,
         total_price INT NOT NULL,
         quantity INT NOT NULL,
-        created_by VARCHAR NULL references users(username)
+        created_by VARCHAR NULL references users(username) ON DELETE\
+         SET NULL ON UPDATE CASCADE
     )""",
     """CREATE TABLE IF NOT EXISTS blacklist(
         id SERIAL PRIMARY KEY NOT NULL,
@@ -39,11 +42,12 @@ create_tables_queries = [
     """CREATE TABLE IF NOT EXISTS carts(
         cart_id SERIAL PRIMARY KEY NOT NULL,
         product_id INT NOT NULL references products(product_id) ON DELETE\
-         RESTRICT,
+         CASCADE ON UPDATE CASCADE,
         total_price INT NOT NULL,
         quantity INT NOT NULL,
         new_quantity INT NOT NULL,
-        created_by VARCHAR NULL references users(username)
+        created_by VARCHAR NULL references users(username)ON DELETE\
+         CASCADE ON UPDATE CASCADE
     )"""
 ]
 

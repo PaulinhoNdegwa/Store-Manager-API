@@ -1,40 +1,42 @@
 from app.tests.v2.basetest import BaseTest
 from flask import json
-from .data import sale, sale_update, product, empty_sale_details
+from .data import sale, sale_update, product, empty_sale_details, category
 
 
 class SalesTestCase(BaseTest):
     """Test suite for sales"""
 
-    def test_post_sale(self):
-        access_token_2 = self.authenticateAdmin()
-        access_token = self.authenticate()
-        self.client.post("/api/v2/products", data=json.dumps(product),
-                         headers={'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer ' + access_token_2})
-        self.client.post("/api/v2/sales", data=json.dumps(sale),
+    def add_test_sale(self):
+        """Add a test product"""
+
+        access_token = self.authenticateAdmin()
+        access_token_2 = self.authenticate()
+        self.client.post("/api/v2/category", data=json.dumps(category),
                          headers={'Content-Type': 'application/json',
                                   'Authorization': 'Bearer ' + access_token})
-        response = self.client.post("/api/v2/cart", 
+        self.client.post("/api/v2/products", data=json.dumps(product),
+                         headers={'Content-Type': 'application/json',
+                                  'Authorization': 'Bearer ' + access_token})
+        response = self.client.post("/api/v2/sales", data=json.dumps(sale),
                                     headers={'Content-Type': 'application/json',
-                                             'Authorization': 'Bearer ' + access_token})
+                                             'Authorization': 'Bearer ' + access_token_2})
+        print(json.loads(response.data))
+        return response
+
+    def test_post_sale(self):
+
+        response = self.add_test_sale()
+
         self.assertEqual(json.loads(response.data)["status"], 201)
-        self.assertEqual(json.loads(response.data)["message"],
-                         "Successfully saved")
 
     def test_get_sales(self):
         """"Test GET all sales orders"""
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
-        self.client.post("/api/v2/products", data=json.dumps(product),
-                         headers={'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer ' + access_token_2})
-        self.client.post("/api/v2/sales", data=json.dumps(sale),
+        self.add_test_sale()
+        self.client.post("/api/v2/cart",
                          headers={'Content-Type': 'application/json',
                                   'Authorization': 'Bearer ' + access_token})
-        self.client.post("/api/v2/cart",
-                                    headers={'Content-Type': 'application/json',
-                                             'Authorization': 'Bearer ' + access_token})
         response = self.client.get("/api/v2/sales",
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token_2})
@@ -56,21 +58,15 @@ class SalesTestCase(BaseTest):
         """"Test GET single sale order"""
         access_token = self.authenticate()
         access_token_2 = self.authenticateAdmin()
-        self.client.post("/api/v2/products", data=json.dumps(product),
-                         headers={'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer ' + access_token_2})
-        self.client.post("/api/v2/sales", data=json.dumps(sale),
-                                    headers={'Content-Type': 'application/json',
-                                             'Authorization': 'Bearer ' + access_token})
+        self.add_test_sale()
         self.client.post("/api/v2/cart",
-                                    headers={'Content-Type': 'application/json',
-                                             'Authorization': 'Bearer ' + access_token})
+                         headers={'Content-Type': 'application/json',
+                                  'Authorization': 'Bearer ' + access_token})
         response = self.client.get("/api/v2/sales/1",
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token_2})
         self.assertEqual(json.loads(response.data)["status"], 200)
         self.assertIsInstance(json.loads(response.data)["Sale"], dict)
-        
 
     def test_get_inexistent_sale_id(self):
         """"Test GET inexistent sale order """

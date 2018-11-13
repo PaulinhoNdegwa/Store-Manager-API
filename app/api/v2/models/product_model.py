@@ -24,9 +24,10 @@ class Product():
         category_available = Category().get_cat_by_name(category)
 
         if not category_available:
-            category_id = None
-        else:
-            category_id = category_available[0]
+            return jsonify({"message": "Provide category",
+                            "status": 400})
+
+        category_id = category_available[1]
 
         conn = open_connection()
         cur = conn.cursor()
@@ -61,11 +62,10 @@ class Product():
                         "status": 201})
 
     def update_product(self, product_id, product_name, model, product_price,
-                       quantity, min_quantity, created_by):
+                       quantity, category, min_quantity, created_by):
         """This method allows an admin to update the products details"""
 
         product_exist = self.get_product_by_id(product_id)
-        print(product_exist)
         if not product_exist:
             return jsonify({"message": "Product does not exist",
                             "status": 404})
@@ -76,11 +76,12 @@ class Product():
         conn = open_connection()
         cur = conn.cursor()
         cur.execute("""UPDATE products set product_name=%s, product_model=%s, \
-                    unit_price=%s, quantity=%s, min_quantity=%s, created_by=%s\
+                    unit_price=%s, quantity=%s, cat_id=%s, min_quantity=%s, \
+                    created_by=%s\
                     WHERE product_id=%s RETURNING product_id, product_name,\
                     product_model, unit_price, quantity, min_quantity, \
                     created_by""",
-                    (product_name, model, product_price, new_quantity,
+                    (product_name, model, product_price, new_quantity, category,
                      min_quantity, created_by, product_id, ))
         updated_product = cur.fetchone()
         product = {

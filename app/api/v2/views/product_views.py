@@ -78,6 +78,7 @@ class SingleProduct(Resource, Product):
         model = request.get_json("model")["model"].strip(" ")
         product_price = request.get_json("product_price")["product_price"]
         quantity = request.get_json("quantity")["quantity"]
+        category = request.get_json("category")[("category")]
         min_quantity = request.get_json("min_quantity")["min_quantity"]
 
         if not product_name or not model or not product_price or not quantity \
@@ -95,6 +96,7 @@ class SingleProduct(Resource, Product):
             "model": model,
             "product_price": product_price,
             "quantity": quantity,
+            "category": category,
             "min_quantity": min_quantity,
             "created_by": current_user
         }
