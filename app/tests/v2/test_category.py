@@ -8,13 +8,17 @@ from .data import new_category, update_category, invalid_category
 class CategoryTestCase(BaseTest):
     """This is a test suite for categories"""
 
-    def test_create_category(self):
-        """This method test successful creation of a category"""
-
+    def add_test_category(self):
+        """Adds a test category"""
         access_token = self.authenticateAdmin()
         response = self.client.post("/api/v2/category", data=json.dumps(new_category),
                                     headers={'Content-Type': 'application/json',
                                              'Authorization': 'Bearer ' + access_token})
+        return response
+
+    def test_create_category(self):
+        """This method test successful creation of a category"""
+        response = self.add_test_category()
         self.assertEqual(json.loads(response.data)["status"], 200)
         self.assertEqual(json.loads(response.data)["message"],
                          "Category added successfully")
@@ -43,10 +47,8 @@ class CategoryTestCase(BaseTest):
 
     def test_update_category(self):
         """This method tests for the successful update of a category"""
+        self.add_test_category()
         access_token = self.authenticateAdmin()
-        self.client.post("/api/v2/category", data=json.dumps(new_category),
-                         headers={'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer ' + access_token})
         response = self.client.put("/api/v2/category/1", data=json.dumps(update_category),
                                    headers={'Content-Type': 'application/json',
                                             'Authorization': 'Bearer ' + access_token})
@@ -79,10 +81,8 @@ class CategoryTestCase(BaseTest):
     def test_successfully_delete_category(self):
         """This method tests the successfull deletion of a category"""
 
+        self.add_test_category()
         access_token = self.authenticateAdmin()
-        self.client.post("/api/v2/category", data=json.dumps(new_category),
-                         headers={'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer ' + access_token})
         response = self.client.delete("/api/v2/category/1",
                                       headers={'Content-Type': 'application/json',
                                                'Authorization': 'Bearer ' + access_token})

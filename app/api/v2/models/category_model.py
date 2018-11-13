@@ -42,6 +42,33 @@ class Category():
                 "status": 400
             })
 
+    def get_all_categories(self):
+        """Method to get all categories"""
+        try:
+            conn = open_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM categories")
+            categories = cur.fetchall()
+            close_connection(conn)
+
+            category_list = []
+            for category in categories:
+                cat_item = {
+                    "Category_id": category[0],
+                    "Category_Name": category[1],
+                    "Description": category[2]
+                }
+                category_list.append(cat_item)
+
+            return jsonify({
+                "message": "Successful",
+                "Categories": category_list,
+                "status": 200
+            })
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Could not retrieve category", error)
+
     def get_cat_by_id(self, cat_id):
         """Returns a category if it exists in the database"""
 

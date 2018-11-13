@@ -130,7 +130,7 @@ class Sale():
         return jsonify({
             "message": "Added {} item(s) of product id {} to cart".format(quantity, product_id),
             "Cart": cart_list,
-            "status": 200
+            "status": 201
         })
 
     def get_all_cart_items(self, current_user):
