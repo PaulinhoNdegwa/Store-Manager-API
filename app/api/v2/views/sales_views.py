@@ -105,6 +105,7 @@ class Cart(Resource):
 
         return jsonify({"Username": current_user,
                         "message": "Successful",
+                        "status": 200,
                         "Cart": sale.get_all_cart_items(current_user)})
 
     @jwt_required

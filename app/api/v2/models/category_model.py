@@ -25,9 +25,9 @@ class Category():
                 RETURNING id, cat_name, cat_desc", (cat_name, description,))
             new_category = cur.fetchone()
             category = {
-                "category_id": new_category[0],
-                "category_name": new_category[1],
-                "description": new_category[2]
+                "Category_id": new_category[0],
+                "Category_Name": new_category[1],
+                "Description": new_category[2]
             }
             close_connection(conn)
             return jsonify({

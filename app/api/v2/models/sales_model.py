@@ -191,7 +191,7 @@ class Sale():
             sale_saved.append(sale)
 
         self.clear_cart(current_user)
-        return jsonify({"message": "Successfully saved",
+        return jsonify({"message": "Sale successfully saved",
                         "Sale_saved": sale_saved,
                         "status": 201})
 

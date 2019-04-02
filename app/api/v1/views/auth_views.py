@@ -71,7 +71,6 @@ class Login(Resource, User):
                 "message": "Incorrect password",
                 "status": 400
             })
-        print(user_exists)
         role = user_exists[0]["role"]
         user_identity = {
             "username": email,

@@ -48,17 +48,16 @@ class Product():
                      min_quantity, created_by,))
         new_product = cur.fetchone()
         product = {
-            "Product Id": new_product[0],
-            "Product Name": new_product[1],
-            "Product Model": new_product[2],
-            "Unit Price": new_product[3],
-            "Quantity": new_product[4],
-            "Min Quantity": new_product[5],
-            "Created By": new_product[6]
+            "product_id": new_product[0],
+            "product_name": new_product[1],
+            "product_model": new_product[2],
+            "unit_price": new_product[3],
+            "quantity": new_product[4],
+            "min_quantity": new_product[5]
         }
         close_connection(conn)
         return jsonify({"message": "Successfully saved",
-                        "Product id saved": product,
+                        "Product_saved": product,
                         "status": 201})
 
     def update_product(self, product_id, product_name, model, product_price,
